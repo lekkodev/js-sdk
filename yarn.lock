@@ -172,13 +172,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^7.2.0":
-  version: 7.2.0
-  resolution: "commander@npm:7.2.0"
-  checksum: 53501cbeee61d5157546c0bef0fedb6cdfc763a882136284bed9a07225f09a14b82d2a84e7637edfd1a679fb35ed9502fd58ef1d091e6287f60d790147f68ddc
-  languageName: node
-  linkType: hard
-
 "crypto-js@npm:^4.1.1":
   version: 4.1.1
   resolution: "crypto-js@npm:4.1.1"
@@ -190,43 +183,6 @@ __metadata:
   version: 0.2.2
   resolution: "cuint@npm:0.2.2"
   checksum: b8127a93a7f16ce120ffcb22108014327c9808b258ee20e7dbb4c6740d7cb0f0c12d18a054eb716b0f2470090666abaae8a082d3cd5ef0e94fa447dd155842c4
-  languageName: node
-  linkType: hard
-
-"find-package@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "find-package@npm:1.0.0"
-  dependencies:
-    parents: ^1.0.1
-  checksum: 48840557446ffbd5d461080be9d55ee0858a493678b9fdf03512ce0f69b20572a990d2b9489f50f762164e6021fe9421d92b9d578779bf343af775a69185fc95
-  languageName: node
-  linkType: hard
-
-"genversion@npm:^3.1.1":
-  version: 3.1.1
-  resolution: "genversion@npm:3.1.1"
-  dependencies:
-    commander: ^7.2.0
-    find-package: ^1.0.0
-  bin:
-    genversion: bin/genversion.js
-  checksum: 6cc575683f0a68e4a6d58e3e2087cc9a32522048ce7b1fc999eec8fba71deb74f9bd78f10724a0cf6e9fb836bdcae1258b1f199eb0fe6c4cc5adedb9055c0037
-  languageName: node
-  linkType: hard
-
-"parents@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "parents@npm:1.0.1"
-  dependencies:
-    path-platform: ~0.11.15
-  checksum: 094fc817d5e8d94e9f9d38c2618a2822f2960b7a268183a36326c5d1cf6ff32f97b1158b0f9b32ab126573996dfe6db104feda6d26e8531d762d178ef4488fc8
-  languageName: node
-  linkType: hard
-
-"path-platform@npm:~0.11.15":
-  version: 0.11.15
-  resolution: "path-platform@npm:0.11.15"
-  checksum: 239f2eae720531ff5a48837de68f94ebd7cf6cd2bf295b39beb97c5bafc34a34a683b62f9f5ad5ca5e78d71d7d44c29e7c56373c1c8473ab128a4e648bb898f0
   languageName: node
   linkType: hard
 
@@ -243,7 +199,6 @@ __metadata:
     "@bufbuild/protobuf": ^1.2.0
     "@types/xxhashjs": ^0.2.2
     crypto-js: ^4.1.1
-    genversion: ^3.1.1
     typescript: ^5.2.2
     xxhashjs: ^0.2.2
   languageName: unknown

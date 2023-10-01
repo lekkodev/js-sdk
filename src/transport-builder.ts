@@ -1,7 +1,6 @@
 import { createConnectTransport } from '@bufbuild/connect-web'
 
 import { type Transport } from "@bufbuild/connect";
-import { readOptions } from './proto';
 
 const APIKEY_INTERCEPTOR = (apiKey?: string) => (next: any) => async (req: any) => {
   if (apiKey) {
@@ -25,7 +24,6 @@ export class ClientTransportBuilder {
       }
       return createConnectTransport({
         baseUrl: this.hostname,
-        jsonOptions: readOptions,
         interceptors: [APIKEY_INTERCEPTOR(this.apiKey)],
       });
   }

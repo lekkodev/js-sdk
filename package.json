@@ -1,15 +1,14 @@
 {
   "name": "sdk-ts",
-  "version": "1.0.34",
+  "version": "1.0.36",
   "main": "dist/index.js",
   "license": "MIT",
   "devDependencies": {
     "@types/xxhashjs": "^0.2.2",
-    "genversion": "^3.1.1",
     "typescript": "^5.2.2"
   },
   "scripts": {
-    "build": "npx genversion -use src/version.js && tsc",
+    "build": "tsc",
     "watch": "tsc --watch"
   },
   "dependencies": {
