@@ -13,6 +13,7 @@
   },
   "include": ["src/**/*.ts", "src/index.ts"],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "src/**/*.spec.ts", "src/**/*.test.ts", "src/**/*.spec.tsx", "src/**/*.test.tsx"
   ],
 }
