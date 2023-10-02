@@ -33,5 +33,7 @@ module.exports = {
     "rules": {
         "@typescript-eslint/explicit-function-return-type": "off",
         "indent": ['error', 2],
+        "semi": ["error", "never"],
+        "@typescript-eslint/semi": ["error", "never"]
     }
 }
