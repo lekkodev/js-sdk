@@ -11,8 +11,8 @@ interface APIOptions {
   repositoryName: string
 }
 
-async function initAPIClient(options: APIOptions): Promise<Client> {
-  const transport = await new ClientTransportBuilder({
+function initAPIClient(options: APIOptions): Client {
+  const transport = new ClientTransportBuilder({
     hostname: options.hostname ?? "https://prod.api.lekko.dev/api",
     apiKey: options.apiKey,
   }).build()

@@ -20,7 +20,7 @@ export class ClientTransportBuilder {
     this.apiKey = apiKey
   }
 
-  async build(): Promise<Transport> {
+  build(): Transport {
     if (this.apiKey === undefined) {
       throw new Error("API Key required")
     }

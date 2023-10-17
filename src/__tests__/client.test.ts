@@ -15,10 +15,10 @@ import {
 } from "@buf/lekkodev_sdk.bufbuild_es/lekko/client/v1beta1/configuration_service_pb"
 import { Any, BoolValue } from "@bufbuild/protobuf"
 import { ClientContext } from "../context/context"
-import { TransportClient, initAPIClient } from "../index"
+import { type TransportClient, initAPIClient } from "../index"
 
 test("build API client", async () => {
-  const client = await initAPIClient({
+  const client = initAPIClient({
     apiKey: "apiKey",
     repositoryOwner: "lekkodev",
     repositoryName: "config-test",
@@ -27,7 +27,7 @@ test("build API client", async () => {
 })
 
 test("build API client with hostname", async () => {
-  const client = await initAPIClient({
+  const client = initAPIClient({
     apiKey: "apiKey",
     hostname: "http://testhostname.com",
     repositoryOwner: "lekkodev",
@@ -40,11 +40,11 @@ const SAMPLE_CONTEXT = new ClientContext()
 SAMPLE_CONTEXT.setString("sample_key", "sample_value")
 
 test("get bool config", async () => {
-  const client = (await initAPIClient({
+  const client = initAPIClient({
     apiKey: "apiKey",
     repositoryOwner: "lekkodev",
     repositoryName: "config-test",
-  })) as TransportClient
+  }) as TransportClient
   const mockFn = jest.fn()
   Object.defineProperty(client.client, "getBoolValue", {
     value: mockFn,
@@ -75,11 +75,11 @@ test("get bool config", async () => {
 })
 
 test("get int config", async () => {
-  const client = (await initAPIClient({
+  const client = initAPIClient({
     apiKey: "apiKey",
     repositoryOwner: "lekkodev",
     repositoryName: "config-test",
-  })) as TransportClient
+  }) as TransportClient
   const mockFn = jest.fn()
   Object.defineProperty(client.client, "getIntValue", {
     value: mockFn,
@@ -113,11 +113,11 @@ test("get int config", async () => {
 })
 
 test("get float config", async () => {
-  const client = (await initAPIClient({
+  const client = initAPIClient({
     apiKey: "apiKey",
     repositoryOwner: "lekkodev",
     repositoryName: "config-test",
-  })) as TransportClient
+  }) as TransportClient
   const mockFn = jest.fn()
   Object.defineProperty(client.client, "getFloatValue", {
     value: mockFn,
@@ -150,11 +150,11 @@ test("get float config", async () => {
 })
 
 test("get json config", async () => {
-  const client = (await initAPIClient({
+  const client = initAPIClient({
     apiKey: "apiKey",
     repositoryOwner: "lekkodev",
     repositoryName: "config-test",
-  })) as TransportClient
+  }) as TransportClient
   const mockedValue = {
     a: 1,
     b: {
@@ -193,11 +193,11 @@ test("get json config", async () => {
 })
 
 test("get string config", async () => {
-  const client = (await initAPIClient({
+  const client = initAPIClient({
     apiKey: "apiKey",
     repositoryOwner: "lekkodev",
     repositoryName: "config-test",
-  })) as TransportClient
+  }) as TransportClient
   const mockFn = jest.fn()
   Object.defineProperty(client.client, "getStringValue", {
     value: mockFn,
@@ -236,11 +236,11 @@ test("get proto config", async () => {
     }),
   )
   const testWithResponse = async (resp: GetProtoValueResponse) => {
-    const client = (await initAPIClient({
+    const client = initAPIClient({
       apiKey: "apiKey",
       repositoryOwner: "lekkodev",
       repositoryName: "config-test",
-    })) as TransportClient
+    }) as TransportClient
     const mockFn = jest.fn()
     Object.defineProperty(client.client, "getProtoValue", {
       value: mockFn,
@@ -250,7 +250,7 @@ test("get proto config", async () => {
     jest
       .spyOn(client.client, "getProtoValue")
       .mockImplementation(async () => resp)
-    expect(await client.getProto("types", "proto", SAMPLE_CONTEXT)).toEqual(a)
+    expect(client.getProto("types", "proto", SAMPLE_CONTEXT)).toEqual(a)
     expect(mockFn.mock.lastCall[0]).toEqual(
       GetProtoValueRequest.fromJson({
         key: "proto",
