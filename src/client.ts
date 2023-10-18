@@ -18,9 +18,9 @@ import { ClientContext } from "./context/context"
 import { type Client } from "./types/client"
 
 export class TransportClient implements Client {
+  public repository: RepositoryKey
   baseContext: ClientContext
   client: PromiseClient<typeof ConfigurationService>
-  repository: RepositoryKey
 
   constructor(
     repositoryOwner: string,
