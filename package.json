@@ -1,9 +1,9 @@
 {
   "name": "@lekko/js-sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/index.js",
-  "license": "MIT",
   "types": "./dist/index.d.ts",
+  "private": false,
   "devDependencies": {
     "@types/jest": "^29.5.5",
     "@types/xxhashjs": "^0.2.2",

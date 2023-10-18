@@ -13,7 +13,7 @@ interface APIOptions {
 
 function initAPIClient(options: APIOptions): Client {
   const transport = new ClientTransportBuilder({
-    hostname: options.hostname ?? "https://prod.api.lekko.dev/api",
+    hostname: options.hostname ?? "https://app.lekko.com/api/",
     apiKey: options.apiKey,
   }).build()
   return new TransportClient(
