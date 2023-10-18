@@ -1,4 +1,7 @@
-import { Value } from "@buf/lekkodev_sdk.bufbuild_es/lekko/client/v1beta1/configuration_service_pb"
+import {
+  Value,
+  RepositoryKey,
+} from "@buf/lekkodev_sdk.bufbuild_es/lekko/client/v1beta1/configuration_service_pb"
 import { TransportClient } from "./client"
 import { ClientContext } from "./context/context"
 import { ClientTransportBuilder } from "./transport-builder"
@@ -23,4 +26,11 @@ function initAPIClient(options: APIOptions): Client {
   )
 }
 
-export { ClientContext, TransportClient, Value, initAPIClient, type Client }
+export {
+  ClientContext,
+  TransportClient,
+  Value,
+  initAPIClient,
+  type Client,
+  RepositoryKey,
+}
