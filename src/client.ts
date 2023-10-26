@@ -95,12 +95,15 @@ export class TransportClient implements Client {
     req.repoKey = this.repository
     Object.assign(req.context, this.baseContext.data, ctx.data)
     const res = await this.client.getJSONValue(req)
+
     try {
-      const decoded = Buffer.from(res.value).toString()
+      const textDecoder = new TextDecoder()
+      const decoded = textDecoder.decode(res.value)
       return JSON.parse(decoded)
-    } catch (ex) {
-      // Invalid encoding?
+    } catch (error) {
+      console.error("An error occurred while decoding or parsing JSON: ", error)
     }
+
     return {}
   }
 
