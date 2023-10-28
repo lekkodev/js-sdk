@@ -1,6 +1,6 @@
 {
   "name": "@lekko/js-sdk",
-  "version": "0.0.2-beta-2",
+  "version": "0.0.2-beta-3",
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",
   "devDependencies": {
@@ -26,7 +26,7 @@
     "typescript": "^5.2.2"
   },
   "scripts": {
-    "build": "rollup -c",
+    "build": "rm -rf dist/ && rollup -c",
     "watch": "tsc --watch",
     "lint": "npx prettier --write src && eslint src --fix",
     "test": "jest"
