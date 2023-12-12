@@ -1,4 +1,4 @@
-import { createConnectTransport } from "@bufbuild/connect-web"
+import { createGrpcWebTransport } from "@bufbuild/connect-web"
 
 import { type Transport } from "@bufbuild/connect"
 
@@ -24,7 +24,7 @@ export class ClientTransportBuilder {
     if (this.apiKey === undefined) {
       throw new Error("API Key required")
     }
-    return createConnectTransport({
+    return createGrpcWebTransport({
       baseUrl: this.hostname,
       interceptors: [APIKEY_INTERCEPTOR(this.apiKey)],
     })
