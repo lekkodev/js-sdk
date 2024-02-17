@@ -1,4 +1,4 @@
-import { ConfigurationService } from "@buf/lekkodev_sdk.bufbuild_connect-es/lekko/client/v1beta1/configuration_service_connect"
+import { ConfigurationService } from "@buf/lekkodev_sdk.connectrpc_es/lekko/client/v1beta1/configuration_service_connect"
 import {
   GetBoolValueRequest,
   GetFloatValueRequest,
@@ -12,7 +12,7 @@ import {
   type PromiseClient,
   type Transport,
   createPromiseClient,
-} from "@bufbuild/connect"
+} from "@connectrpc/connect"
 import { Any } from "@bufbuild/protobuf"
 import { ClientContext } from "./context/context"
 import { type Client } from "./types/client"
