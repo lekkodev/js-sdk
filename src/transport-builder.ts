@@ -1,6 +1,6 @@
-import { createGrpcWebTransport } from "@bufbuild/connect-web"
+import { createGrpcWebTransport } from "@connectrpc/connect-web"
 
-import { type Transport, type Interceptor } from "@bufbuild/connect"
+import { type Transport, type Interceptor } from "@connectrpc/connect"
 
 const APIKEY_INTERCEPTOR: (apiKey?: string) => Interceptor =
   (apiKey?: string) => (next) => async (req) => {
