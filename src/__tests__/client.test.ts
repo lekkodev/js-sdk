@@ -12,7 +12,7 @@ import {
   GetStringValueRequest,
   GetStringValueResponse,
   Any as LekkoAny,
-} from "@buf/lekkodev_sdk.bufbuild_es/lekko/client/v1beta1/configuration_service_pb"
+} from "../gen/lekko/client/v1beta1/configuration_service_pb"
 import { Any, BoolValue } from "@bufbuild/protobuf"
 import { ClientContext } from "../context/context"
 import { type TransportClient, initAPIClient } from "../index"
@@ -250,7 +250,7 @@ test("get proto config", async () => {
     jest
       .spyOn(client.client, "getProtoValue")
       .mockImplementation(async () => resp)
-    expect(client.getProto("types", "proto", SAMPLE_CONTEXT)).toEqual(a)
+    expect(await client.getProto("types", "proto", SAMPLE_CONTEXT)).toEqual(a)
     expect(mockFn.mock.lastCall[0]).toEqual(
       GetProtoValueRequest.fromJson({
         key: "proto",

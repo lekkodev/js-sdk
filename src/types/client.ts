@@ -1,6 +1,6 @@
 import { type Any } from "@bufbuild/protobuf"
 import { type ClientContext } from "../context/context"
-import { type RepositoryKey } from "@buf/lekkodev_sdk.bufbuild_es/lekko/client/v1beta1/configuration_service_pb"
+import { type RepositoryKey } from "../gen/lekko/client/v1beta1/configuration_service_pb"
 
 export interface Client {
   repository: RepositoryKey

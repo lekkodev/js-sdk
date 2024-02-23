@@ -1,4 +1,4 @@
-import { ConfigurationService } from "@buf/lekkodev_sdk.connectrpc_es/lekko/client/v1beta1/configuration_service_connect"
+import { ConfigurationService } from "./gen/lekko/client/v1beta1/configuration_service_connect"
 import {
   GetBoolValueRequest,
   GetFloatValueRequest,
@@ -7,7 +7,7 @@ import {
   GetProtoValueRequest,
   GetStringValueRequest,
   RepositoryKey,
-} from "@buf/lekkodev_sdk.bufbuild_es/lekko/client/v1beta1/configuration_service_pb"
+} from "./gen/lekko/client/v1beta1/configuration_service_pb"
 import {
   type PromiseClient,
   type Transport,
