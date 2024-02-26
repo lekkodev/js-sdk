@@ -1,7 +1,7 @@
 import {
   Value,
   RepositoryKey,
-} from "@buf/lekkodev_sdk.bufbuild_es/lekko/client/v1beta1/configuration_service_pb"
+} from "./gen/lekko/client/v1beta1/configuration_service_pb"
 import { TransportClient } from "./client"
 import { ClientContext } from "./context/context"
 import { ClientTransportBuilder } from "./transport-builder"

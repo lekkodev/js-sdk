@@ -424,39 +424,111 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@buf/lekkodev_sdk.bufbuild_es@npm:1.6.0-20230810202034-1c821065b9a0.1":
-  version: 1.6.0-20230810202034-1c821065b9a0.1
-  resolution: "@buf/lekkodev_sdk.bufbuild_es@npm:1.6.0-20230810202034-1c821065b9a0.1"
-  peerDependencies:
-    "@bufbuild/protobuf": ^1.6.0
-  checksum: d072b1b426511fb3b3fb985c7a4e1b28f7afd680cbd9c85868fc0b24c73102f4048f645e2f80af48fcc86ec2bb49341e030a85e5390c9ffc4acc626f80cc26d3
+"@bufbuild/buf-darwin-arm64@npm:1.29.0":
+  version: 1.29.0
+  resolution: "@bufbuild/buf-darwin-arm64@npm:1.29.0"
+  conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@buf/lekkodev_sdk.bufbuild_es@npm:^1.7.2-20230810202034-1c821065b9a0.1":
-  version: 1.7.2-20230810202034-1c821065b9a0.1
-  resolution: "@buf/lekkodev_sdk.bufbuild_es@npm:1.7.2-20230810202034-1c821065b9a0.1"
-  peerDependencies:
-    "@bufbuild/protobuf": ^1.7.2
-  checksum: 684db3e1033ed2936503a074a2e53a09c06dece4787caacf328533ecc1a6a6b86f1cc0fc115848c4a6d71143e3772a210ef8f755235497d8a2110aae1a865128
+"@bufbuild/buf-darwin-x64@npm:1.29.0":
+  version: 1.29.0
+  resolution: "@bufbuild/buf-darwin-x64@npm:1.29.0"
+  conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@buf/lekkodev_sdk.connectrpc_es@npm:^1.3.0-20230810202034-1c821065b9a0.1":
-  version: 1.3.0-20230810202034-1c821065b9a0.1
-  resolution: "@buf/lekkodev_sdk.connectrpc_es@npm:1.3.0-20230810202034-1c821065b9a0.1"
+"@bufbuild/buf-linux-aarch64@npm:1.29.0":
+  version: 1.29.0
+  resolution: "@bufbuild/buf-linux-aarch64@npm:1.29.0"
+  conditions: os=linux & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@bufbuild/buf-linux-x64@npm:1.29.0":
+  version: 1.29.0
+  resolution: "@bufbuild/buf-linux-x64@npm:1.29.0"
+  conditions: os=linux & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@bufbuild/buf-win32-arm64@npm:1.29.0":
+  version: 1.29.0
+  resolution: "@bufbuild/buf-win32-arm64@npm:1.29.0"
+  conditions: os=win32 & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@bufbuild/buf-win32-x64@npm:1.29.0":
+  version: 1.29.0
+  resolution: "@bufbuild/buf-win32-x64@npm:1.29.0"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@bufbuild/buf@npm:^1.29.0":
+  version: 1.29.0
+  resolution: "@bufbuild/buf@npm:1.29.0"
   dependencies:
-    "@buf/lekkodev_sdk.bufbuild_es": 1.6.0-20230810202034-1c821065b9a0.1
-  peerDependencies:
-    "@connectrpc/connect": ^1.3.0
-  checksum: 51ff5446bea61a89eebcb6e090b92ea7996fd26da3273f60c5434aa79941c8febf9832d775303b431314ca30b38307a3406e0a1eb4497aba1a70f9e477adefb9
+    "@bufbuild/buf-darwin-arm64": 1.29.0
+    "@bufbuild/buf-darwin-x64": 1.29.0
+    "@bufbuild/buf-linux-aarch64": 1.29.0
+    "@bufbuild/buf-linux-x64": 1.29.0
+    "@bufbuild/buf-win32-arm64": 1.29.0
+    "@bufbuild/buf-win32-x64": 1.29.0
+  dependenciesMeta:
+    "@bufbuild/buf-darwin-arm64":
+      optional: true
+    "@bufbuild/buf-darwin-x64":
+      optional: true
+    "@bufbuild/buf-linux-aarch64":
+      optional: true
+    "@bufbuild/buf-linux-x64":
+      optional: true
+    "@bufbuild/buf-win32-arm64":
+      optional: true
+    "@bufbuild/buf-win32-x64":
+      optional: true
+  bin:
+    buf: bin/buf
+    protoc-gen-buf-breaking: bin/protoc-gen-buf-breaking
+    protoc-gen-buf-lint: bin/protoc-gen-buf-lint
+  checksum: fa55aacdeb1eff440f18fb03efe18775fb76c0aad3de7cea2df9f87ac1881ca6582156dea5efa7084cdc936abd64cb914d7014cfae2fbe87b52454bde9f23d46
   languageName: node
   linkType: hard
 
-"@bufbuild/protobuf@npm:^1.7.2":
+"@bufbuild/protobuf@npm:1.7.2, @bufbuild/protobuf@npm:^1.6.0, @bufbuild/protobuf@npm:^1.7.2":
   version: 1.7.2
   resolution: "@bufbuild/protobuf@npm:1.7.2"
   checksum: f91e2574c97a64cceba04f7e697279fee621eb76cf5d049047184e3d08bd2c52d4a7e9afbe8560cfd49948bd61a24dc9013d6ca56fc10302e948de09afd7acff
+  languageName: node
+  linkType: hard
+
+"@bufbuild/protoc-gen-es@npm:^1.7.2":
+  version: 1.7.2
+  resolution: "@bufbuild/protoc-gen-es@npm:1.7.2"
+  dependencies:
+    "@bufbuild/protobuf": ^1.7.2
+    "@bufbuild/protoplugin": 1.7.2
+  peerDependencies:
+    "@bufbuild/protobuf": 1.7.2
+  peerDependenciesMeta:
+    "@bufbuild/protobuf":
+      optional: true
+  bin:
+    protoc-gen-es: bin/protoc-gen-es
+  checksum: da60b7209efaac9ee3ebe4df1c4552340a27650c98da6e4cc37d6a16ca21fe346d8fa085984a255b0fbf093b71ecaaa679408d5339001af5698ca824fc58ea97
+  languageName: node
+  linkType: hard
+
+"@bufbuild/protoplugin@npm:1.7.2, @bufbuild/protoplugin@npm:^1.6.0":
+  version: 1.7.2
+  resolution: "@bufbuild/protoplugin@npm:1.7.2"
+  dependencies:
+    "@bufbuild/protobuf": 1.7.2
+    "@typescript/vfs": ^1.4.0
+    typescript: 4.5.2
+  checksum: e7079254e9f96bbb64d0095977ca9909bcad7e5b2f0d28e1414172c3b4cd563e512cbdae1dd43136fdaece94e4a40e9ac8a443813426341be81265734aed705b
   languageName: node
   linkType: hard
 
@@ -476,6 +548,26 @@ __metadata:
   peerDependencies:
     "@bufbuild/protobuf": ^1.4.2
   checksum: a68bfffedd817a7db3563c00e5efc5eb510cc00a93c722d81fa1f52b71a96300d7175b0c0710a9d2ef2e8aaabee36921c90470a80343e7a9fbccffd3cc83f868
+  languageName: node
+  linkType: hard
+
+"@connectrpc/protoc-gen-connect-es@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "@connectrpc/protoc-gen-connect-es@npm:1.3.0"
+  dependencies:
+    "@bufbuild/protobuf": ^1.6.0
+    "@bufbuild/protoplugin": ^1.6.0
+  peerDependencies:
+    "@bufbuild/protoc-gen-es": ^1.6.0
+    "@connectrpc/connect": 1.3.0
+  peerDependenciesMeta:
+    "@bufbuild/protoc-gen-es":
+      optional: true
+    "@connectrpc/connect":
+      optional: true
+  bin:
+    protoc-gen-connect-es: bin/protoc-gen-connect-es
+  checksum: e4cc099ec5aa72d01e3fa5eb5aa14692070088aad53a88df44295b0af63d8717cc97a8dbf4b2a2e64c06f4451de0f27f40cf96dee2a0f5f6d4d686e9b9666b69
   languageName: node
   linkType: hard
 
@@ -866,11 +958,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@lekko/js-sdk@workspace:."
   dependencies:
-    "@buf/lekkodev_sdk.bufbuild_es": ^1.7.2-20230810202034-1c821065b9a0.1
-    "@buf/lekkodev_sdk.connectrpc_es": ^1.3.0-20230810202034-1c821065b9a0.1
+    "@bufbuild/buf": ^1.29.0
     "@bufbuild/protobuf": ^1.7.2
+    "@bufbuild/protoc-gen-es": ^1.7.2
     "@connectrpc/connect": ^1.3.0
     "@connectrpc/connect-web": ^1.3.0
+    "@connectrpc/protoc-gen-connect-es": ^1.3.0
     "@rollup/plugin-commonjs": ^25.0.7
     "@rollup/plugin-node-resolve": ^15.2.3
     "@rollup/plugin-terser": ^0.4.4
@@ -1425,6 +1518,15 @@ __metadata:
     "@typescript-eslint/types": 6.7.4
     eslint-visitor-keys: ^3.4.1
   checksum: 34d09798b6c48dc059e88c6cb3df5f96e859bd65d1dd05d907b8a3c7a5708a737d50607081fb14a4b974b90cfe4169a93db974bf53af8b282420187f73b0afac
+  languageName: node
+  linkType: hard
+
+"@typescript/vfs@npm:^1.4.0":
+  version: 1.5.0
+  resolution: "@typescript/vfs@npm:1.5.0"
+  dependencies:
+    debug: ^4.1.1
+  checksum: 09916e2fc567fe993fd81a34a48f72183b4c84d73a6bfdd8d4ca60ecd28de80fbb509b050f30513913b86270dc2abc759cffb4c0fd1068f7dd53104a1b0b7e27
   languageName: node
   linkType: hard
 
@@ -6015,6 +6117,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"typescript@npm:4.5.2":
+  version: 4.5.2
+  resolution: "typescript@npm:4.5.2"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 74f9ce65d532bdf5d0214b3f60cf37992180023388c87a11ee6f838a803067ef0b63c600fa501b0deb07f989257dce1e244c9635ed79feca40bbccf6e0aa1ebc
+  languageName: node
+  linkType: hard
+
 "typescript@npm:^5.2.2":
   version: 5.2.2
   resolution: "typescript@npm:5.2.2"
@@ -6022,6 +6134,16 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 7912821dac4d962d315c36800fe387cdc0a6298dba7ec171b350b4a6e988b51d7b8f051317786db1094bd7431d526b648aba7da8236607febb26cf5b871d2d3c
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@4.5.2#~builtin<compat/typescript>":
+  version: 4.5.2
+  resolution: "typescript@patch:typescript@npm%3A4.5.2#~builtin<compat/typescript>::version=4.5.2&hash=bcec9a"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: e25e689eba64f7da7cfc43f8ea76cac7176b56caba42655f0a4cb29c0b7c36e67ca54f33df95902859f56108464245d8b45bcdfe21e3d66d9560feb8db780246
   languageName: node
   linkType: hard
 
