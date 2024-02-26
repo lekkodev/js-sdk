@@ -9,7 +9,7 @@
     "watch": "tsc --watch",
     "lint": "npx prettier --write src && eslint src --fix",
     "test": "jest",
-    "gen-connect": "buf generate buf.build/lekkodev/sdk --type lekko.client.v1beta1"
+    "bufgen": "rm -rf src/gen && buf generate buf.build/lekkodev/sdk --type lekko.client.v1beta1"
   },
   "dependencies": {
     "@bufbuild/protobuf": "^1.7.2",
