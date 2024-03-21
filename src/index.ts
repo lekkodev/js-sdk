@@ -4,8 +4,11 @@ import {
 } from "./gen/lekko/client/v1beta1/configuration_service_pb"
 import { TransportClient } from "./client"
 import { ClientContext } from "./context/context"
-import { ClientTransportBuilder } from "./transport-builder"
-import { type Client } from "./types/client"
+import { ClientTransportBuilder  } from "./transport-builder"
+import { SyncClient, type Client } from "./types/client"
+//import { type Transport } from "@bufbuild/connect";
+//import { Git } from './memory/git';
+import { Backend } from './memory/backend';
 
 interface APIOptions {
   apiKey: string
@@ -38,6 +41,41 @@ function initAPIClient(options: APIOptions): Client {
   )
 }
 
+type BackendOptions = {
+  apiKey?: string
+  hostname? : string
+  repositoryOwner: string
+  repositoryName: string
+  updateIntervalMs?: number
+  //transportProtocol?: TransportProtocol
+  serverPort?: number,
+}
+
+const version = "0.2.0"
+
+function sdkVersion() : string {
+  const v = (version.startsWith('v')) ? version : `v${version}`;
+  return 'node-' + v;
+}
+
+async function initCachedAPIClient(options: BackendOptions): Promise<SyncClient> {
+  const transport = new ClientTransportBuilder({
+    hostname: options.hostname ?? "https://prod.api.lekko.dev",
+    apiKey: options.apiKey
+  }).build();
+  console.log('after build')
+  const client = new Backend(
+    transport, 
+    options.repositoryOwner, 
+    options.repositoryName, 
+    sdkVersion(),
+    options.serverPort,
+  );
+  console.log('after client')
+  await client.initialize();
+  return client;
+}
+
 export {
   ClientContext,
   TransportClient,
@@ -45,4 +83,5 @@ export {
   initAPIClient,
   type Client,
   RepositoryKey,
+  initCachedAPIClient
 }

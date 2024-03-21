@@ -1,6 +1,6 @@
 {
   "name": "@lekko/js-sdk",
-  "version": "0.1.0-beta-5",
+  "version": "0.1.0-beta-9",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -9,7 +9,8 @@
     "watch": "tsc --watch",
     "lint": "npx prettier --write src && eslint src --fix",
     "test": "jest",
-    "bufgen": "rm -rf src/gen && buf generate buf.build/lekkodev/sdk --type lekko.client.v1beta1"
+    "bufgen": "rm -rf src/gen/lekko && buf generate buf.build/lekkodev/sdk --type lekko.client.v1beta1,lekko.server.v1beta1 && buf generate buf.build/lekkodev/cli --type lekko.feature.v1beta1,lekko.rules.v1beta3,lekko.backend.v1beta1",
+    "bufgen2": "rm -rf src/gen && buf generate buf.build/lekkodev/sdk --type lekko.client.v1beta1"
   },
   "dependencies": {
     "@bufbuild/protobuf": "^1.7.2",
