@@ -11,6 +11,7 @@ import { Client, DevClient, SyncClient } from '../types/client';
 //import { SDKServer } from './server';
 import { Store, StoredEvalResult } from './store';
 import { ListContentsResponse } from '../gen/lekko/server/v1beta1/sdk_pb';
+import { EventsBatcher, toContextKeysProto } from './events';
 
 const eventsBatchSize = 100;
 
@@ -22,10 +23,8 @@ export class Backend implements SyncClient, DevClient {
     repoKey: RepositoryKey;
     sessionKey?: string;
     closed: boolean;
-    //updateIntervalMs?: number;
     timeout?: NodeJS.Timeout;
-    //eventsBatcher: EventsBatcher;
-    //server: SDKServer;
+    eventsBatcher: EventsBatcher;
     version: string;
 
     constructor(
@@ -33,8 +32,6 @@ export class Backend implements SyncClient, DevClient {
         repositoryOwner: string,
         repositoryName: string,
         version: string,
-        //updateIntervalMs?: number,
-        port?: number,
     ) {
         this.distClient = createPromiseClient(DistributionService, transport);
         this.store = new Store(repositoryOwner, repositoryName);
@@ -46,11 +43,11 @@ export class Backend implements SyncClient, DevClient {
             ownerName: repositoryOwner,
             repoName: repositoryName,
           })
-        //this.updateIntervalMs = updateIntervalMs;
         this.closed = false;
         this.version = version;
-        //this.eventsBatcher = new EventsBatcher(this.distClient, eventsBatchSize);
-        //this.server = new SDKServer(this, port);
+        console.log('initializing events batcher')
+        this.eventsBatcher = new EventsBatcher(this.distClient, eventsBatchSize);
+        console.log('events batcher')
     }
 
     getBool(namespace: string, key: string, ctx?: ClientContext): boolean {
@@ -81,7 +78,7 @@ export class Backend implements SyncClient, DevClient {
     }
     getProto(namespace: string, key: string, ctx?: ClientContext): Any {
         const result = this.store.evaluateType(namespace, key, ctx);
-        //this.track(namespace, key, result, ctx);
+        this.track(namespace, key, result, ctx);
         return result.evalResult.value;
     }
 
@@ -99,10 +96,10 @@ export class Backend implements SyncClient, DevClient {
         if (!result.evalResult.value.unpackTo(wrapper)) {
             throw new Error('type mismatch');
         }
-        //this.track(namespace, configKey, result, ctx);
+        this.track(namespace, configKey, result, ctx);
     }
 
-    /*track(namespace: string, key: string, result: StoredEvalResult, ctx?: ClientContext) {
+    track(namespace: string, key: string, result: StoredEvalResult, ctx?: ClientContext) {
         if (!this.eventsBatcher) {
             return;
         }
@@ -116,23 +113,15 @@ export class Backend implements SyncClient, DevClient {
             resultPath: result.evalResult.path,
             clientEventTime: Timestamp.now(),
         }));
-    }*/  
+    }
 
     async initialize() {
-        console.log('initializing')
         const registerResponse = await this.distClient.registerClient({
             repoKey: this.repoKey,
-            //sidecarVersion: this.version,
         })
-        console.log('here')
         this.sessionKey = registerResponse.sessionKey;
-        console.log(this.sessionKey)
         await this.updateStore();
-        console.log('after updating store')
-        /*if (this.updateIntervalMs) {
-            await this.loop();
-        }*/
-       // await this.eventsBatcher.init(this.sessionKey);
+        await this.eventsBatcher.init(this.sessionKey);
     }
     
     /**
@@ -148,25 +137,6 @@ export class Backend implements SyncClient, DevClient {
     async createConfig(): Promise<void> {
         return;
     }
-
-   /* async loop() {
-        this.timeout = setTimeout(() => {
-            if (this.closed) {
-                return;
-            }
-            this.shouldUpdateStore()
-                .then((should) => {
-                    if (should) {
-                        this.updateStore()
-                            // TODO: log properly across the board
-                            .finally(() => this.loop());
-                    } else {
-                        this.loop();
-                    }
-                }).catch(() => this.loop());
-                
-        }, this.updateIntervalMs);
-    }*/
 
     async updateStore() {
         const contentsResponse = await this.distClient.getRepositoryContents({
@@ -187,13 +157,12 @@ export class Backend implements SyncClient, DevClient {
 
     async close() {
         this.closed = true;
-        //this.server.close();
         if (this.timeout) {
             this.timeout.unref();
         }
-        /*if (this.eventsBatcher) {
+        if (this.eventsBatcher) {
             await this.eventsBatcher.close();
-        }*/
+        }
         await this.distClient.deregisterClient({
             sessionKey: this.sessionKey
         });

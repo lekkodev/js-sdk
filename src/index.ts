@@ -5,9 +5,7 @@ import {
 import { TransportClient } from "./client"
 import { ClientContext } from "./context/context"
 import { ClientTransportBuilder  } from "./transport-builder"
-import { SyncClient, type Client } from "./types/client"
-//import { type Transport } from "@bufbuild/connect";
-//import { Git } from './memory/git';
+import { type SyncClient, type Client } from "./types/client"
 import { Backend } from './memory/backend';
 
 interface APIOptions {
@@ -47,7 +45,6 @@ type BackendOptions = {
   repositoryOwner: string
   repositoryName: string
   updateIntervalMs?: number
-  //transportProtocol?: TransportProtocol
   serverPort?: number,
 }
 
@@ -63,16 +60,15 @@ async function initCachedAPIClient(options: BackendOptions): Promise<SyncClient>
     hostname: options.hostname ?? "https://prod.api.lekko.dev",
     apiKey: options.apiKey
   }).build();
-  console.log('after build')
   const client = new Backend(
     transport, 
     options.repositoryOwner, 
     options.repositoryName, 
     sdkVersion(),
-    options.serverPort,
   );
-  console.log('after client')
+  console.log('about to initialize')
   await client.initialize();
+  console.log('initialized in js sdk')
   return client;
 }
 
@@ -82,6 +78,7 @@ export {
   Value,
   initAPIClient,
   type Client,
+  type SyncClient,
   RepositoryKey,
   initCachedAPIClient
 }
