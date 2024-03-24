@@ -9,6 +9,37 @@ class ClientContext {
     this.data = {}
   }
 
+  static fromJSON(
+    jsonContext?: Record<string, string | number | boolean>,
+  ): ClientContext {
+    const ctx = new ClientContext()
+    if (jsonContext === undefined) {
+      return ctx
+    }
+    Object.entries(jsonContext).forEach(([k, v]) => {
+      switch (typeof v) {
+        case "number": {
+          // TODO: `1.0` is still integer in js :(
+          if (Number.isInteger(v)) {
+            ctx.setInt(k, v)
+          } else {
+            ctx.setDouble(k, v)
+          }
+          break
+        }
+        case "string": {
+          ctx.setString(k, v)
+          break
+        }
+        case "boolean": {
+          ctx.setBoolean(k, v)
+          break
+        }
+      }
+    })
+    return ctx
+  }
+
   get(key: string): Value | undefined {
     return key in this.data ? this.data[key] : undefined
   }
