@@ -8,13 +8,20 @@ import { type Value as LekkoValue } from "../gen/lekko/client/v1beta1/configurat
 import { type Value } from "@bufbuild/protobuf"
 import { type ClientContext } from "../context/context"
 
+// If the hashed config value % 100 <= threshold, it fits in the "bucket".
+// In reality, we internally store the threshold as an integer in [0,100000]
+// to account for up to 3 decimal places.
+// The config value is salted using the namespace, config name, and context key.
+
+import CryptoJS from "crypto-js"
+
 export default function evaluateRule(
   rule: Rule | undefined,
   namespace: string,
   configName: string,
   context?: ClientContext,
 ): boolean {
-  if (!rule) {
+  if (rule === undefined) {
     throw new Error("empty rule")
   }
   switch (rule.rule.case) {
@@ -23,7 +30,7 @@ export default function evaluateRule(
     case "not":
       return !evaluateRule(rule.rule.value, namespace, configName, context)
     case "logicalExpression": {
-      if (rule.rule.value.rules.length == 0) {
+      if (rule.rule.value.rules.length === 0) {
         throw new Error("no rules found in logical expression")
       }
       const lo = rule.rule.value.logicalOperator
@@ -38,15 +45,15 @@ export default function evaluateRule(
             default:
               throw new Error("unknown logical operator")
           }
-        }, lo == LogicalOperator.AND)
+        }, lo === LogicalOperator.AND)
     }
     case "atom": {
       const contextKey = rule.rule.value.contextKey
       const contextValue = context?.get(contextKey)
-      if (rule.rule.value.comparisonOperator == ComparisonOperator.PRESENT) {
+      if (rule.rule.value.comparisonOperator === ComparisonOperator.PRESENT) {
         return contextValue !== undefined
       }
-      if (!contextValue) {
+      if (contextValue === undefined) {
         // All other comparison operators expect the context key to be present. If
         // it is not present, return false.
         return false
@@ -97,10 +104,12 @@ export default function evaluateRule(
   throw new Error("unknown rule type")
 }
 
-// If the hashed config value % 100 <= threshold, it fits in the "bucket".
-// In reality, we internally store the threshold as an integer in [0,100000]
-// to account for up to 3 decimal places.
-// The config value is salted using the namespace, config name, and context key.
+function synchronousHash(data: Uint8Array): string {
+  const wordArray = CryptoJS.lib.WordArray.create([...data])
+  const hash = CryptoJS.SHA256(wordArray)
+  return hash.toString(CryptoJS.enc.Hex)
+}
+
 function evaluateBucket(
   bucketF: CallExpression_Bucket,
   namespace: string,
@@ -109,59 +118,84 @@ function evaluateBucket(
 ): boolean {
   const ctxKey = bucketF.contextKey
   const value = context?.get(ctxKey)
-  if (!value) {
-    // If key is missing in context map, evaluate to false - move to next rule
+  if (value === undefined) {
     return false
   }
-  let bytesBuffer: Buffer
+
+  let bytesArray: Uint8Array
   switch (value.kind.case) {
-    case "stringValue":
-      bytesBuffer = Buffer.from(value.kind.value)
+    case "stringValue": {
+      bytesArray = new TextEncoder().encode(value.kind.value)
       break
+    }
     case "intValue": {
-      bytesBuffer = Buffer.alloc(8)
-      bytesBuffer.writeBigInt64BE(value.kind.value)
+      const bufferInt = new ArrayBuffer(8)
+      new DataView(bufferInt).setBigInt64(0, BigInt(value.kind.value), false)
+      bytesArray = new Uint8Array(bufferInt)
       break
     }
     case "doubleValue": {
-      bytesBuffer = Buffer.alloc(8)
-      bytesBuffer.writeDoubleBE(value.kind.value)
+      const bufferDouble = new ArrayBuffer(8)
+      new DataView(bufferDouble).setFloat64(0, value.kind.value, false)
+      bytesArray = new Uint8Array(bufferDouble)
       break
     }
     default:
-      throw new Error("unsupported value type for bucket")
+      throw new Error("Unsupported value type for bucket")
   }
-  const bytesFrags: Buffer[] = [
-    Buffer.from(namespace),
-    Buffer.from(configName),
-    Buffer.from(ctxKey),
-    bytesBuffer,
+
+  const bytesFrags = [
+    new TextEncoder().encode(namespace),
+    new TextEncoder().encode(configName),
+    new TextEncoder().encode(ctxKey),
+    bytesArray,
   ]
-  // const result = h32(Buffer.concat(bytesFrags), 0);
-  return true // result.toNumber() % 100000 <= bucketF.threshold;
+
+  const concatenatedBytes = concatenateTypedArrays(Uint8Array, bytesFrags)
+
+  const hashHex = synchronousHash(concatenatedBytes)
+  const hashNumber = parseInt(hashHex.slice(0, 15), 16) % 100000
+
+  return hashNumber <= bucketF.threshold
+}
+
+function concatenateTypedArrays(
+  ResultConstructor: new (length: number) => Uint8Array,
+  arrays: Uint8Array[],
+): Uint8Array {
+  const totalLength = arrays.reduce((acc, val) => acc + val.length, 0)
+  const result = new ResultConstructor(totalLength)
+  arrays.reduce((offset, arr) => {
+    result.set(arr, offset)
+    return offset + arr.length
+  }, 0)
+  return result
 }
 
 function evaluateEquals(
   ruleVal: Value | undefined,
   ctxVal: LekkoValue,
 ): boolean {
-  if (!ruleVal) {
+  if (ruleVal === undefined) {
     throw new Error("value is undefined")
   }
   switch (ruleVal.kind.case) {
     case "boolValue":
-      if (ctxVal.kind.case == "boolValue") {
-        return ruleVal.kind.value == ctxVal.kind.value
+      if (ctxVal.kind.case === "boolValue") {
+        return ruleVal.kind.value === ctxVal.kind.value
       }
       throw new Error("type mismatch, expecting boolean")
     case "numberValue":
-      if (ctxVal.kind.case == "doubleValue" || ctxVal.kind.case == "intValue") {
-        return ruleVal.kind.value == ctxVal.kind.value
+      if (
+        ctxVal.kind.case === "doubleValue" ||
+        ctxVal.kind.case === "intValue"
+      ) {
+        return ruleVal.kind.value === ctxVal.kind.value
       }
       throw new Error("type mismatch, expecting double or int")
     case "stringValue":
-      if (ctxVal.kind.case == "stringValue") {
-        return ruleVal.kind.value == ctxVal.kind.value
+      if (ctxVal.kind.case === "stringValue") {
+        return ruleVal.kind.value === ctxVal.kind.value
       }
       throw new Error("type mismatch, expecting string")
   }
@@ -188,7 +222,7 @@ function evaluateStringComparator(
 }
 
 function getString(v: Value | LekkoValue | undefined): string {
-  if (!v) {
+  if (v === undefined) {
     throw new Error("value is undefined")
   }
   switch (v.kind.case) {
@@ -221,7 +255,7 @@ function evaluateNumberComparator(
 }
 
 function getNumber(v: Value | LekkoValue | undefined): number {
-  if (!v) {
+  if (v === undefined) {
     throw new Error("value is undefined")
   }
   switch (v.kind.case) {
@@ -240,7 +274,7 @@ function evaluateContainedWithin(
   ruleVal: Value | undefined,
   ctxVal: LekkoValue,
 ): boolean {
-  if (!ruleVal) {
+  if (ruleVal === undefined) {
     throw new Error("value is undefined")
   }
   switch (ruleVal.kind.case) {

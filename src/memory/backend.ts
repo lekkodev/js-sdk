@@ -16,9 +16,7 @@ import {
   Value,
 } from "@bufbuild/protobuf"
 import { type ClientContext } from "../context/context"
-import { Client, type DevClient, type SyncClient } from "../types/client"
-// import { EventsBatcher, toContextKeysProto } from './events';
-// import { SDKServer } from './server';
+import { type DevClient, type SyncClient } from "../types/client"
 import { Store, type StoredEvalResult } from "./store"
 import { type ListContentsResponse } from "../gen/lekko/server/v1beta1/sdk_pb"
 import { EventsBatcher, toContextKeysProto } from "./events"
@@ -30,7 +28,6 @@ export class Backend implements SyncClient, DevClient {
   public repository: RepositoryKey
   distClient: PromiseClient<typeof DistributionService>
   store: Store
-  repoKey: RepositoryKey
   sessionKey?: string
   closed: boolean
   timeout?: NodeJS.Timeout
@@ -45,10 +42,6 @@ export class Backend implements SyncClient, DevClient {
   ) {
     this.distClient = createPromiseClient(DistributionService, transport)
     this.store = new Store(repositoryOwner, repositoryName)
-    this.repoKey = new RepositoryKey({
-      ownerName: repositoryOwner,
-      repoName: repositoryName,
-    })
     this.repository = RepositoryKey.fromJson({
       ownerName: repositoryOwner,
       repoName: repositoryName,
@@ -106,7 +99,7 @@ export class Backend implements SyncClient, DevClient {
     ctx?: ClientContext,
   ) {
     const result = this.store.evaluateType(namespace, configKey, ctx)
-    if (!result.evalResult.value.unpackTo(wrapper)) {
+    if (result.evalResult.value.unpackTo(wrapper) === undefined) {
       throw new Error("type mismatch")
     }
     this.track(namespace, configKey, result, ctx)
@@ -118,30 +111,34 @@ export class Backend implements SyncClient, DevClient {
     result: StoredEvalResult,
     ctx?: ClientContext,
   ) {
-    if (!this.eventsBatcher) {
+    if (this.eventsBatcher === undefined) {
       return
     }
-    this.eventsBatcher.track(
-      new FlagEvaluationEvent({
-        repoKey: this.repoKey,
-        commitSha: result.commitSHA,
-        featureSha: result.configSHA,
-        namespaceName: namespace,
-        featureName: key,
-        contextKeys: toContextKeysProto(ctx),
-        resultPath: result.evalResult.path,
-        clientEventTime: Timestamp.now(),
-      }),
-    )
+    this.eventsBatcher
+      .track(
+        new FlagEvaluationEvent({
+          repoKey: this.repository,
+          commitSha: result.commitSHA,
+          featureSha: result.configSHA,
+          namespaceName: namespace,
+          featureName: key,
+          contextKeys: toContextKeysProto(ctx),
+          resultPath: result.evalResult.path,
+          clientEventTime: Timestamp.now(),
+        }),
+      )
+      .catch((e) => {
+        console.log(`Error tracking events: ${e}`)
+      })
   }
 
   async initialize() {
     const registerResponse = await this.distClient.registerClient({
-      repoKey: this.repoKey,
+      repoKey: this.repository,
     })
     this.sessionKey = registerResponse.sessionKey
     await this.updateStore()
-    await this.eventsBatcher.init(this.sessionKey)
+    this.eventsBatcher.init(this.sessionKey)
   }
 
   /**
@@ -156,27 +153,29 @@ export class Backend implements SyncClient, DevClient {
 
   async updateStore() {
     const contentsResponse = await this.distClient.getRepositoryContents({
-      repoKey: this.repoKey,
+      repoKey: this.repository,
       sessionKey: this.sessionKey,
     })
-    this.store.load(contentsResponse)
+    this.store.load(contentsResponse).catch((e) => {
+      console.log(`Error loading repository contents: ${e}`)
+    })
   }
 
   async shouldUpdateStore() {
     const versionResponse = await this.distClient.getRepositoryVersion({
-      repoKey: this.repoKey,
+      repoKey: this.repository,
       sessionKey: this.sessionKey,
     })
     const currentSha = this.store.getCommitSHA()
-    return currentSha != versionResponse.commitSha
+    return currentSha !== versionResponse.commitSha
   }
 
   async close() {
     this.closed = true
-    if (this.timeout) {
+    if (this.timeout !== undefined) {
       this.timeout.unref()
     }
-    if (this.eventsBatcher) {
+    if (this.eventsBatcher !== undefined) {
       await this.eventsBatcher.close()
     }
     await this.distClient.deregisterClient({
