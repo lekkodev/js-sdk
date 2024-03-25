@@ -70,7 +70,7 @@ function traverse(
     configName,
     context,
   )
-  if (passes) {
+  if (!passes) {
     // If the rule fails, we avoid further traversal
     return { passes, path: [] }
   }
