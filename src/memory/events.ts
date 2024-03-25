@@ -28,14 +28,16 @@ export class EventsBatcher {
   init(sessionKey: string): void {
     this.sessionKey = sessionKey
     this.interval = window.setInterval(() => {
-      this.sendBatch()
+      this.sendBatch().catch((error) => {
+        console.error("Failed to send batch:", error)
+      })
     }, 5000)
   }
 
-  track(event: FlagEvaluationEvent): void {
+  async track(event: FlagEvaluationEvent): Promise<void> {
     this.batch.push(event)
     if (this.batch.length >= this.batchSize) {
-      this.sendBatch()
+      await this.sendBatch()
     }
   }
 
@@ -43,7 +45,7 @@ export class EventsBatcher {
     if (this.batch.length === 0) {
       return
     }
-    if (this.sendPromise) {
+    if (this.sendPromise !== undefined) {
       await this.sendPromise
     }
 
@@ -62,8 +64,8 @@ export class EventsBatcher {
           sessionKey: this.sessionKey,
         }),
       )
-    } catch (e) {
-      console.error(`Failed to send metrics batch: ${e}`)
+    } catch (e: unknown) {
+      console.error(`Failed to send metrics batch: ${String(e)}`)
       this.batch.unshift(...events)
     }
   }
@@ -72,7 +74,7 @@ export class EventsBatcher {
     if (this.interval !== undefined) {
       clearInterval(this.interval)
     }
-    if (this.sendPromise) {
+    if (this.sendPromise !== undefined) {
       await this.sendPromise
     }
     await this.sendBatch()
@@ -80,23 +82,20 @@ export class EventsBatcher {
 }
 
 export function toContextKeysProto(context?: ClientContext): ContextKey[] {
-  const result: ContextKey[] = []
-  if (!context) {
-    return result
+  if (context === undefined) {
+    return []
   }
-  for (const key in context.data) {
-    result.push(
+  return Object.keys(context.data).map(
+    (key) =>
       new ContextKey({
         key,
         type: lekkoValueToType(context.get(key)),
       }),
-    )
-  }
-  return result
+  )
 }
 
 function lekkoValueToType(val: Value | undefined): string {
-  if (!val) {
+  if (val === undefined) {
     return ""
   }
   switch (val.kind.case) {
