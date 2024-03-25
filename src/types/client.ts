@@ -1,7 +1,7 @@
 import { type Any } from "@bufbuild/protobuf"
 import { type ClientContext } from "../context/context"
 import { type RepositoryKey } from "../gen/lekko/client/v1beta1/configuration_service_pb"
-import { ListContentsResponse } from '../gen/lekko/server/v1beta1/sdk_pb';
+import { type ListContentsResponse } from "../gen/lekko/server/v1beta1/sdk_pb"
 
 export interface Client {
   repository: RepositoryKey
@@ -40,43 +40,27 @@ export interface Client {
 }
 
 export interface DevClient {
-  listContents(): ListContentsResponse;
-  reinitialize(options: { path?: string, force?: boolean }): Promise<void>;
-  createConfig(type: "bool" | "string" | "int" | "float" | "json", namespace: string, key: string): Promise<void>;
+  listContents: () => ListContentsResponse
+  reinitialize: (options: { path?: string; force?: boolean }) => Promise<void>
+  createConfig: (
+    type: "bool" | "string" | "int" | "float" | "json",
+    namespace: string,
+    key: string,
+  ) => Promise<void>
 }
 
 export interface SyncClient {
   repository: RepositoryKey
-  getBool: (
-    namespace: string,
-    key: string,
-    ctx?: ClientContext,
-  ) => boolean
-  getInt: (
-    namespace: string,
-    key: string,
-    ctx?: ClientContext,
-  ) => bigint
-  getFloat: (
-    namespace: string,
-    key: string,
-    ctx?: ClientContext,
-  ) => number
-  getString: (
-    namespace: string,
-    key: string,
-    ctx?: ClientContext,
-  ) => string
+  getBool: (namespace: string, key: string, ctx?: ClientContext) => boolean
+  getInt: (namespace: string, key: string, ctx?: ClientContext) => bigint
+  getFloat: (namespace: string, key: string, ctx?: ClientContext) => number
+  getString: (namespace: string, key: string, ctx?: ClientContext) => string
   getJSON: (
     namespace: string,
     key: string,
     ctx?: ClientContext,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) => any
-  getProto: (
-    namespace: string,
-    key: string,
-    ctx?: ClientContext,
-  ) => Any
+  getProto: (namespace: string, key: string, ctx?: ClientContext) => Any
   close: () => Promise<void>
 }

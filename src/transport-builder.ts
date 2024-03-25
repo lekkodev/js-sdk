@@ -7,7 +7,7 @@ const APIKEY_INTERCEPTOR: (apiKey?: string) => Interceptor =
     if (apiKey !== undefined) {
       req.header.set("apikey", apiKey)
     }
-    return next(req)
+    return await next(req)
   }
 
 const LOCAL_PATH_INTERCEPTOR: (path?: string) => Interceptor =
@@ -15,7 +15,7 @@ const LOCAL_PATH_INTERCEPTOR: (path?: string) => Interceptor =
     if (path !== undefined) {
       req.header.set("localpath", path)
     }
-    return next(req)
+    return await next(req)
   }
 
 export class ClientTransportBuilder {
@@ -50,4 +50,3 @@ export class ClientTransportBuilder {
     })
   }
 }
-

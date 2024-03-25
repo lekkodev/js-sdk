@@ -17,8 +17,15 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Message, proto3, Value } from "@bufbuild/protobuf";
+import type {
+  BinaryReadOptions,
+  FieldList,
+  JsonReadOptions,
+  JsonValue,
+  PartialMessage,
+  PlainMessage,
+} from "@bufbuild/protobuf"
+import { Message, proto3, Value } from "@bufbuild/protobuf"
 
 /**
  * @generated from enum lekko.rules.v1beta3.ComparisonOperator
@@ -102,20 +109,24 @@ export enum ComparisonOperator {
   NOT_EQUALS = 11,
 }
 // Retrieve enum metadata with: proto3.getEnumType(ComparisonOperator)
-proto3.util.setEnumType(ComparisonOperator, "lekko.rules.v1beta3.ComparisonOperator", [
-  { no: 0, name: "COMPARISON_OPERATOR_UNSPECIFIED" },
-  { no: 1, name: "COMPARISON_OPERATOR_EQUALS" },
-  { no: 2, name: "COMPARISON_OPERATOR_LESS_THAN" },
-  { no: 3, name: "COMPARISON_OPERATOR_LESS_THAN_OR_EQUALS" },
-  { no: 4, name: "COMPARISON_OPERATOR_GREATER_THAN" },
-  { no: 5, name: "COMPARISON_OPERATOR_GREATER_THAN_OR_EQUALS" },
-  { no: 6, name: "COMPARISON_OPERATOR_CONTAINED_WITHIN" },
-  { no: 7, name: "COMPARISON_OPERATOR_STARTS_WITH" },
-  { no: 8, name: "COMPARISON_OPERATOR_ENDS_WITH" },
-  { no: 9, name: "COMPARISON_OPERATOR_CONTAINS" },
-  { no: 10, name: "COMPARISON_OPERATOR_PRESENT" },
-  { no: 11, name: "COMPARISON_OPERATOR_NOT_EQUALS" },
-]);
+proto3.util.setEnumType(
+  ComparisonOperator,
+  "lekko.rules.v1beta3.ComparisonOperator",
+  [
+    { no: 0, name: "COMPARISON_OPERATOR_UNSPECIFIED" },
+    { no: 1, name: "COMPARISON_OPERATOR_EQUALS" },
+    { no: 2, name: "COMPARISON_OPERATOR_LESS_THAN" },
+    { no: 3, name: "COMPARISON_OPERATOR_LESS_THAN_OR_EQUALS" },
+    { no: 4, name: "COMPARISON_OPERATOR_GREATER_THAN" },
+    { no: 5, name: "COMPARISON_OPERATOR_GREATER_THAN_OR_EQUALS" },
+    { no: 6, name: "COMPARISON_OPERATOR_CONTAINED_WITHIN" },
+    { no: 7, name: "COMPARISON_OPERATOR_STARTS_WITH" },
+    { no: 8, name: "COMPARISON_OPERATOR_ENDS_WITH" },
+    { no: 9, name: "COMPARISON_OPERATOR_CONTAINS" },
+    { no: 10, name: "COMPARISON_OPERATOR_PRESENT" },
+    { no: 11, name: "COMPARISON_OPERATOR_NOT_EQUALS" },
+  ],
+)
 
 /**
  * @generated from enum lekko.rules.v1beta3.LogicalOperator
@@ -137,11 +148,15 @@ export enum LogicalOperator {
   OR = 2,
 }
 // Retrieve enum metadata with: proto3.getEnumType(LogicalOperator)
-proto3.util.setEnumType(LogicalOperator, "lekko.rules.v1beta3.LogicalOperator", [
-  { no: 0, name: "LOGICAL_OPERATOR_UNSPECIFIED" },
-  { no: 1, name: "LOGICAL_OPERATOR_AND" },
-  { no: 2, name: "LOGICAL_OPERATOR_OR" },
-]);
+proto3.util.setEnumType(
+  LogicalOperator,
+  "lekko.rules.v1beta3.LogicalOperator",
+  [
+    { no: 0, name: "LOGICAL_OPERATOR_UNSPECIFIED" },
+    { no: 1, name: "LOGICAL_OPERATOR_AND" },
+    { no: 2, name: "LOGICAL_OPERATOR_OR" },
+  ],
+)
 
 /**
  * A Rule is a top level object that recursively defines an AST represented
@@ -162,67 +177,103 @@ export class Rule extends Message<Rule> {
   /**
    * @generated from oneof lekko.rules.v1beta3.Rule.rule
    */
-  rule: {
-    /**
-     * @generated from field: lekko.rules.v1beta3.Atom atom = 1;
-     */
-    value: Atom;
-    case: "atom";
-  } | {
-    /**
-     * @generated from field: lekko.rules.v1beta3.Rule not = 2;
-     */
-    value: Rule;
-    case: "not";
-  } | {
-    /**
-     * @generated from field: lekko.rules.v1beta3.LogicalExpression logical_expression = 3;
-     */
-    value: LogicalExpression;
-    case: "logicalExpression";
-  } | {
-    /**
-     * @generated from field: bool bool_const = 4;
-     */
-    value: boolean;
-    case: "boolConst";
-  } | {
-    /**
-     * @generated from field: lekko.rules.v1beta3.CallExpression call_expression = 5;
-     */
-    value: CallExpression;
-    case: "callExpression";
-  } | { case: undefined; value?: undefined } = { case: undefined };
+  rule:
+    | {
+        /**
+         * @generated from field: lekko.rules.v1beta3.Atom atom = 1;
+         */
+        value: Atom
+        case: "atom"
+      }
+    | {
+        /**
+         * @generated from field: lekko.rules.v1beta3.Rule not = 2;
+         */
+        value: Rule
+        case: "not"
+      }
+    | {
+        /**
+         * @generated from field: lekko.rules.v1beta3.LogicalExpression logical_expression = 3;
+         */
+        value: LogicalExpression
+        case: "logicalExpression"
+      }
+    | {
+        /**
+         * @generated from field: bool bool_const = 4;
+         */
+        value: boolean
+        case: "boolConst"
+      }
+    | {
+        /**
+         * @generated from field: lekko.rules.v1beta3.CallExpression call_expression = 5;
+         */
+        value: CallExpression
+        case: "callExpression"
+      }
+    | { case: undefined; value?: undefined } = { case: undefined }
 
   constructor(data?: PartialMessage<Rule>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.rules.v1beta3.Rule";
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = "lekko.rules.v1beta3.Rule"
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "atom", kind: "message", T: Atom, oneof: "rule" },
     { no: 2, name: "not", kind: "message", T: Rule, oneof: "rule" },
-    { no: 3, name: "logical_expression", kind: "message", T: LogicalExpression, oneof: "rule" },
-    { no: 4, name: "bool_const", kind: "scalar", T: 8 /* ScalarType.BOOL */, oneof: "rule" },
-    { no: 5, name: "call_expression", kind: "message", T: CallExpression, oneof: "rule" },
-  ]);
+    {
+      no: 3,
+      name: "logical_expression",
+      kind: "message",
+      T: LogicalExpression,
+      oneof: "rule",
+    },
+    {
+      no: 4,
+      name: "bool_const",
+      kind: "scalar",
+      T: 8 /* ScalarType.BOOL */,
+      oneof: "rule",
+    },
+    {
+      no: 5,
+      name: "call_expression",
+      kind: "message",
+      T: CallExpression,
+      oneof: "rule",
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Rule {
-    return new Rule().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): Rule {
+    return new Rule().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Rule {
-    return new Rule().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): Rule {
+    return new Rule().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Rule {
-    return new Rule().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): Rule {
+    return new Rule().fromJsonString(jsonString, options)
   }
 
-  static equals(a: Rule | PlainMessage<Rule> | undefined, b: Rule | PlainMessage<Rule> | undefined): boolean {
-    return proto3.util.equals(Rule, a, b);
+  static equals(
+    a: Rule | PlainMessage<Rule> | undefined,
+    b: Rule | PlainMessage<Rule> | undefined,
+  ): boolean {
+    return proto3.util.equals(Rule, a, b)
   }
 }
 
@@ -236,39 +287,56 @@ export class LogicalExpression extends Message<LogicalExpression> {
   /**
    * @generated from field: repeated lekko.rules.v1beta3.Rule rules = 1;
    */
-  rules: Rule[] = [];
+  rules: Rule[] = []
 
   /**
    * @generated from field: lekko.rules.v1beta3.LogicalOperator logical_operator = 3;
    */
-  logicalOperator = LogicalOperator.UNSPECIFIED;
+  logicalOperator = LogicalOperator.UNSPECIFIED
 
   constructor(data?: PartialMessage<LogicalExpression>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.rules.v1beta3.LogicalExpression";
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = "lekko.rules.v1beta3.LogicalExpression"
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "rules", kind: "message", T: Rule, repeated: true },
-    { no: 3, name: "logical_operator", kind: "enum", T: proto3.getEnumType(LogicalOperator) },
-  ]);
+    {
+      no: 3,
+      name: "logical_operator",
+      kind: "enum",
+      T: proto3.getEnumType(LogicalOperator),
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): LogicalExpression {
-    return new LogicalExpression().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): LogicalExpression {
+    return new LogicalExpression().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): LogicalExpression {
-    return new LogicalExpression().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): LogicalExpression {
+    return new LogicalExpression().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): LogicalExpression {
-    return new LogicalExpression().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): LogicalExpression {
+    return new LogicalExpression().fromJsonString(jsonString, options)
   }
 
-  static equals(a: LogicalExpression | PlainMessage<LogicalExpression> | undefined, b: LogicalExpression | PlainMessage<LogicalExpression> | undefined): boolean {
-    return proto3.util.equals(LogicalExpression, a, b);
+  static equals(
+    a: LogicalExpression | PlainMessage<LogicalExpression> | undefined,
+    b: LogicalExpression | PlainMessage<LogicalExpression> | undefined,
+  ): boolean {
+    return proto3.util.equals(LogicalExpression, a, b)
   }
 }
 
@@ -283,49 +351,71 @@ export class Atom extends Message<Atom> {
   /**
    * @generated from field: string context_key = 1;
    */
-  contextKey = "";
+  contextKey = ""
 
   /**
    * For the "PRESENT" operator, the comparison value should be null.
    *
    * @generated from field: google.protobuf.Value comparison_value = 2;
    */
-  comparisonValue?: Value;
+  comparisonValue?: Value
 
   /**
    * For operators, context is on the left, comparison value on the right.
    *
    * @generated from field: lekko.rules.v1beta3.ComparisonOperator comparison_operator = 3;
    */
-  comparisonOperator = ComparisonOperator.UNSPECIFIED;
+  comparisonOperator = ComparisonOperator.UNSPECIFIED
 
   constructor(data?: PartialMessage<Atom>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.rules.v1beta3.Atom";
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = "lekko.rules.v1beta3.Atom"
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "context_key", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    {
+      no: 1,
+      name: "context_key",
+      kind: "scalar",
+      T: 9 /* ScalarType.STRING */,
+    },
     { no: 2, name: "comparison_value", kind: "message", T: Value },
-    { no: 3, name: "comparison_operator", kind: "enum", T: proto3.getEnumType(ComparisonOperator) },
-  ]);
+    {
+      no: 3,
+      name: "comparison_operator",
+      kind: "enum",
+      T: proto3.getEnumType(ComparisonOperator),
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Atom {
-    return new Atom().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): Atom {
+    return new Atom().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Atom {
-    return new Atom().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): Atom {
+    return new Atom().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Atom {
-    return new Atom().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): Atom {
+    return new Atom().fromJsonString(jsonString, options)
   }
 
-  static equals(a: Atom | PlainMessage<Atom> | undefined, b: Atom | PlainMessage<Atom> | undefined): boolean {
-    return proto3.util.equals(Atom, a, b);
+  static equals(
+    a: Atom | PlainMessage<Atom> | undefined,
+    b: Atom | PlainMessage<Atom> | undefined,
+  ): boolean {
+    return proto3.util.equals(Atom, a, b)
   }
 }
 
@@ -346,46 +436,73 @@ export class CallExpression extends Message<CallExpression> {
   /**
    * @generated from oneof lekko.rules.v1beta3.CallExpression.function
    */
-  function: {
-    /**
-     * @generated from field: lekko.rules.v1beta3.CallExpression.Bucket bucket = 1;
-     */
-    value: CallExpression_Bucket;
-    case: "bucket";
-  } | {
-    /**
-     * @generated from field: lekko.rules.v1beta3.CallExpression.EvaluateTo evaluate_to = 2;
-     */
-    value: CallExpression_EvaluateTo;
-    case: "evaluateTo";
-  } | { case: undefined; value?: undefined } = { case: undefined };
+  function:
+    | {
+        /**
+         * @generated from field: lekko.rules.v1beta3.CallExpression.Bucket bucket = 1;
+         */
+        value: CallExpression_Bucket
+        case: "bucket"
+      }
+    | {
+        /**
+         * @generated from field: lekko.rules.v1beta3.CallExpression.EvaluateTo evaluate_to = 2;
+         */
+        value: CallExpression_EvaluateTo
+        case: "evaluateTo"
+      }
+    | { case: undefined; value?: undefined } = { case: undefined }
 
   constructor(data?: PartialMessage<CallExpression>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.rules.v1beta3.CallExpression";
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = "lekko.rules.v1beta3.CallExpression"
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "bucket", kind: "message", T: CallExpression_Bucket, oneof: "function" },
-    { no: 2, name: "evaluate_to", kind: "message", T: CallExpression_EvaluateTo, oneof: "function" },
-  ]);
+    {
+      no: 1,
+      name: "bucket",
+      kind: "message",
+      T: CallExpression_Bucket,
+      oneof: "function",
+    },
+    {
+      no: 2,
+      name: "evaluate_to",
+      kind: "message",
+      T: CallExpression_EvaluateTo,
+      oneof: "function",
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CallExpression {
-    return new CallExpression().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): CallExpression {
+    return new CallExpression().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): CallExpression {
-    return new CallExpression().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): CallExpression {
+    return new CallExpression().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): CallExpression {
-    return new CallExpression().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): CallExpression {
+    return new CallExpression().fromJsonString(jsonString, options)
   }
 
-  static equals(a: CallExpression | PlainMessage<CallExpression> | undefined, b: CallExpression | PlainMessage<CallExpression> | undefined): boolean {
-    return proto3.util.equals(CallExpression, a, b);
+  static equals(
+    a: CallExpression | PlainMessage<CallExpression> | undefined,
+    b: CallExpression | PlainMessage<CallExpression> | undefined,
+  ): boolean {
+    return proto3.util.equals(CallExpression, a, b)
   }
 }
 
@@ -398,7 +515,7 @@ export class CallExpression_Bucket extends Message<CallExpression_Bucket> {
   /**
    * @generated from field: string context_key = 1;
    */
-  contextKey = "";
+  contextKey = ""
 
   /**
    * Threshold for dividing buckets.
@@ -409,34 +526,51 @@ export class CallExpression_Bucket extends Message<CallExpression_Bucket> {
    *
    * @generated from field: uint32 threshold = 2;
    */
-  threshold = 0;
+  threshold = 0
 
   constructor(data?: PartialMessage<CallExpression_Bucket>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.rules.v1beta3.CallExpression.Bucket";
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = "lekko.rules.v1beta3.CallExpression.Bucket"
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "context_key", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    {
+      no: 1,
+      name: "context_key",
+      kind: "scalar",
+      T: 9 /* ScalarType.STRING */,
+    },
     { no: 2, name: "threshold", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
-  ]);
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CallExpression_Bucket {
-    return new CallExpression_Bucket().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): CallExpression_Bucket {
+    return new CallExpression_Bucket().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): CallExpression_Bucket {
-    return new CallExpression_Bucket().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): CallExpression_Bucket {
+    return new CallExpression_Bucket().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): CallExpression_Bucket {
-    return new CallExpression_Bucket().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): CallExpression_Bucket {
+    return new CallExpression_Bucket().fromJsonString(jsonString, options)
   }
 
-  static equals(a: CallExpression_Bucket | PlainMessage<CallExpression_Bucket> | undefined, b: CallExpression_Bucket | PlainMessage<CallExpression_Bucket> | undefined): boolean {
-    return proto3.util.equals(CallExpression_Bucket, a, b);
+  static equals(
+    a: CallExpression_Bucket | PlainMessage<CallExpression_Bucket> | undefined,
+    b: CallExpression_Bucket | PlainMessage<CallExpression_Bucket> | undefined,
+  ): boolean {
+    return proto3.util.equals(CallExpression_Bucket, a, b)
   }
 }
 
@@ -450,39 +584,61 @@ export class CallExpression_EvaluateTo extends Message<CallExpression_EvaluateTo
   /**
    * @generated from field: string config_name = 1;
    */
-  configName = "";
+  configName = ""
 
   /**
    * @generated from field: google.protobuf.Value config_value = 2;
    */
-  configValue?: Value;
+  configValue?: Value
 
   constructor(data?: PartialMessage<CallExpression_EvaluateTo>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.rules.v1beta3.CallExpression.EvaluateTo";
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = "lekko.rules.v1beta3.CallExpression.EvaluateTo"
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "config_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    {
+      no: 1,
+      name: "config_name",
+      kind: "scalar",
+      T: 9 /* ScalarType.STRING */,
+    },
     { no: 2, name: "config_value", kind: "message", T: Value },
-  ]);
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CallExpression_EvaluateTo {
-    return new CallExpression_EvaluateTo().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): CallExpression_EvaluateTo {
+    return new CallExpression_EvaluateTo().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): CallExpression_EvaluateTo {
-    return new CallExpression_EvaluateTo().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): CallExpression_EvaluateTo {
+    return new CallExpression_EvaluateTo().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): CallExpression_EvaluateTo {
-    return new CallExpression_EvaluateTo().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): CallExpression_EvaluateTo {
+    return new CallExpression_EvaluateTo().fromJsonString(jsonString, options)
   }
 
-  static equals(a: CallExpression_EvaluateTo | PlainMessage<CallExpression_EvaluateTo> | undefined, b: CallExpression_EvaluateTo | PlainMessage<CallExpression_EvaluateTo> | undefined): boolean {
-    return proto3.util.equals(CallExpression_EvaluateTo, a, b);
+  static equals(
+    a:
+      | CallExpression_EvaluateTo
+      | PlainMessage<CallExpression_EvaluateTo>
+      | undefined,
+    b:
+      | CallExpression_EvaluateTo
+      | PlainMessage<CallExpression_EvaluateTo>
+      | undefined,
+  ): boolean {
+    return proto3.util.equals(CallExpression_EvaluateTo, a, b)
   }
 }
-

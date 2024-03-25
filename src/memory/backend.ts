@@ -1,171 +1,186 @@
+import { DistributionService } from "../gen/lekko/backend/v1beta1/distribution_service_connect"
+import { FlagEvaluationEvent } from "../gen/lekko/backend/v1beta1/distribution_service_pb"
+import { RepositoryKey } from "../gen/lekko/client/v1beta1/configuration_service_pb"
 import {
-    DistributionService,
-} from '../gen/lekko/backend/v1beta1/distribution_service_connect';
-import { FlagEvaluationEvent } from '../gen/lekko/backend/v1beta1/distribution_service_pb';
-import { RepositoryKey } from '../gen/lekko/client/v1beta1/configuration_service_pb';
-import { PromiseClient, Transport, createPromiseClient } from '@connectrpc/connect';
-import { Any, BoolValue, DoubleValue, Int64Value, StringValue, Timestamp, Value } from '@bufbuild/protobuf';
-import { ClientContext } from '../context/context';
-import { Client, DevClient, SyncClient } from '../types/client';
-//import { EventsBatcher, toContextKeysProto } from './events';
-//import { SDKServer } from './server';
-import { Store, StoredEvalResult } from './store';
-import { ListContentsResponse } from '../gen/lekko/server/v1beta1/sdk_pb';
-import { EventsBatcher, toContextKeysProto } from './events';
+  type PromiseClient,
+  type Transport,
+  createPromiseClient,
+} from "@connectrpc/connect"
+import {
+  type Any,
+  BoolValue,
+  DoubleValue,
+  Int64Value,
+  StringValue,
+  Timestamp,
+  Value,
+} from "@bufbuild/protobuf"
+import { type ClientContext } from "../context/context"
+import { Client, type DevClient, type SyncClient } from "../types/client"
+// import { EventsBatcher, toContextKeysProto } from './events';
+// import { SDKServer } from './server';
+import { Store, type StoredEvalResult } from "./store"
+import { type ListContentsResponse } from "../gen/lekko/server/v1beta1/sdk_pb"
+import { EventsBatcher, toContextKeysProto } from "./events"
 
-const eventsBatchSize = 100;
+const eventsBatchSize = 100
 
 // An in-memory store that fetches configs from lekko's backend.
 export class Backend implements SyncClient, DevClient {
-    public repository: RepositoryKey
-    distClient: PromiseClient<typeof DistributionService>;
-    store: Store;
-    repoKey: RepositoryKey;
-    sessionKey?: string;
-    closed: boolean;
-    timeout?: NodeJS.Timeout;
-    eventsBatcher: EventsBatcher;
-    version: string;
+  public repository: RepositoryKey
+  distClient: PromiseClient<typeof DistributionService>
+  store: Store
+  repoKey: RepositoryKey
+  sessionKey?: string
+  closed: boolean
+  timeout?: NodeJS.Timeout
+  eventsBatcher: EventsBatcher
+  version: string
 
-    constructor(
-        transport: Transport,
-        repositoryOwner: string,
-        repositoryName: string,
-        version: string,
-    ) {
-        this.distClient = createPromiseClient(DistributionService, transport);
-        this.store = new Store(repositoryOwner, repositoryName);
-        this.repoKey = new RepositoryKey({
-            ownerName: repositoryOwner,
-            repoName: repositoryName
-        });
-        this.repository = RepositoryKey.fromJson({
-            ownerName: repositoryOwner,
-            repoName: repositoryName,
-          })
-        this.closed = false;
-        this.version = version;
-        console.log('initializing events batcher')
-        this.eventsBatcher = new EventsBatcher(this.distClient, eventsBatchSize);
-        console.log('events batcher')
-    }
+  constructor(
+    transport: Transport,
+    repositoryOwner: string,
+    repositoryName: string,
+    version: string,
+  ) {
+    this.distClient = createPromiseClient(DistributionService, transport)
+    this.store = new Store(repositoryOwner, repositoryName)
+    this.repoKey = new RepositoryKey({
+      ownerName: repositoryOwner,
+      repoName: repositoryName,
+    })
+    this.repository = RepositoryKey.fromJson({
+      ownerName: repositoryOwner,
+      repoName: repositoryName,
+    })
+    this.closed = false
+    this.version = version
+    this.eventsBatcher = new EventsBatcher(this.distClient, eventsBatchSize)
+  }
 
-    getBool(namespace: string, key: string, ctx?: ClientContext): boolean {
-        const wrapper = new BoolValue();
-        this.evaluateAndUnpack(namespace, key, wrapper, ctx);
-        return wrapper.value;
-    }
-    getInt(namespace: string, key: string, ctx?: ClientContext): bigint {
-        const wrapper = new Int64Value();
-        this.evaluateAndUnpack(namespace, key, wrapper, ctx);
-        return wrapper.value;
-    }
-    getFloat(namespace: string, key: string, ctx?: ClientContext): number {
-        const wrapper = new DoubleValue();
-        this.evaluateAndUnpack(namespace, key, wrapper, ctx);
-        return wrapper.value;
-    }
-    getString(namespace: string, key: string, ctx?: ClientContext): string {
-        const wrapper = new StringValue();
-        this.evaluateAndUnpack(namespace, key, wrapper, ctx);
-        return wrapper.value;
-    }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    getJSON(namespace: string, key: string, ctx?: ClientContext): any {
-        const wrapper = new Value();
-        this.evaluateAndUnpack(namespace, key, wrapper, ctx);
-        return JSON.parse(wrapper.toJsonString());
-    }
-    getProto(namespace: string, key: string, ctx?: ClientContext): Any {
-        const result = this.store.evaluateType(namespace, key, ctx);
-        this.track(namespace, key, result, ctx);
-        return result.evalResult.value;
-    }
+  getBool(namespace: string, key: string, ctx?: ClientContext): boolean {
+    const wrapper = new BoolValue()
+    this.evaluateAndUnpack(namespace, key, wrapper, ctx)
+    return wrapper.value
+  }
 
-    listContents(): ListContentsResponse {
-        return this.store.listContents();
-    }
+  getInt(namespace: string, key: string, ctx?: ClientContext): bigint {
+    const wrapper = new Int64Value()
+    this.evaluateAndUnpack(namespace, key, wrapper, ctx)
+    return wrapper.value
+  }
 
-    evaluateAndUnpack(
-        namespace: string, 
-        configKey: string,  
-        wrapper: BoolValue | StringValue | Int64Value | DoubleValue | Value,
-        ctx?: ClientContext,
-    ) {
-        const result = this.store.evaluateType(namespace, configKey, ctx);
-        if (!result.evalResult.value.unpackTo(wrapper)) {
-            throw new Error('type mismatch');
-        }
-        this.track(namespace, configKey, result, ctx);
-    }
+  getFloat(namespace: string, key: string, ctx?: ClientContext): number {
+    const wrapper = new DoubleValue()
+    this.evaluateAndUnpack(namespace, key, wrapper, ctx)
+    return wrapper.value
+  }
 
-    track(namespace: string, key: string, result: StoredEvalResult, ctx?: ClientContext) {
-        if (!this.eventsBatcher) {
-            return;
-        }
-        this.eventsBatcher.track(new FlagEvaluationEvent({
-            repoKey: this.repoKey,
-            commitSha: result.commitSHA,
-            featureSha: result.configSHA,
-            namespaceName: namespace,
-            featureName: key,
-            contextKeys: toContextKeysProto(ctx),
-            resultPath: result.evalResult.path,
-            clientEventTime: Timestamp.now(),
-        }));
-    }
+  getString(namespace: string, key: string, ctx?: ClientContext): string {
+    const wrapper = new StringValue()
+    this.evaluateAndUnpack(namespace, key, wrapper, ctx)
+    return wrapper.value
+  }
 
-    async initialize() {
-        const registerResponse = await this.distClient.registerClient({
-            repoKey: this.repoKey,
-        })
-        this.sessionKey = registerResponse.sessionKey;
-        await this.updateStore();
-        await this.eventsBatcher.init(this.sessionKey);
-    }
-    
-    /**
-     * Not implemented
-     */
-    async reinitialize(): Promise<void> {
-        return;
-    }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getJSON(namespace: string, key: string, ctx?: ClientContext): any {
+    const wrapper = new Value()
+    this.evaluateAndUnpack(namespace, key, wrapper, ctx)
+    return JSON.parse(wrapper.toJsonString())
+  }
 
-    /**
-     * Not implemented
-     *  */
-    async createConfig(): Promise<void> {
-        return;
-    }
+  getProto(namespace: string, key: string, ctx?: ClientContext): Any {
+    const result = this.store.evaluateType(namespace, key, ctx)
+    this.track(namespace, key, result, ctx)
+    return result.evalResult.value
+  }
 
-    async updateStore() {
-        const contentsResponse = await this.distClient.getRepositoryContents({
-            repoKey: this.repoKey,
-            sessionKey: this.sessionKey
-        })
-        this.store.load(contentsResponse);
-    }
+  listContents(): ListContentsResponse {
+    return this.store.listContents()
+  }
 
-    async shouldUpdateStore() {
-        const versionResponse = await this.distClient.getRepositoryVersion({
-            repoKey: this.repoKey,
-            sessionKey: this.sessionKey
-        });
-        const currentSha = this.store.getCommitSHA();
-        return currentSha != versionResponse.commitSha;
+  evaluateAndUnpack(
+    namespace: string,
+    configKey: string,
+    wrapper: BoolValue | StringValue | Int64Value | DoubleValue | Value,
+    ctx?: ClientContext,
+  ) {
+    const result = this.store.evaluateType(namespace, configKey, ctx)
+    if (!result.evalResult.value.unpackTo(wrapper)) {
+      throw new Error("type mismatch")
     }
+    this.track(namespace, configKey, result, ctx)
+  }
 
-    async close() {
-        this.closed = true;
-        if (this.timeout) {
-            this.timeout.unref();
-        }
-        if (this.eventsBatcher) {
-            await this.eventsBatcher.close();
-        }
-        await this.distClient.deregisterClient({
-            sessionKey: this.sessionKey
-        });
+  track(
+    namespace: string,
+    key: string,
+    result: StoredEvalResult,
+    ctx?: ClientContext,
+  ) {
+    if (!this.eventsBatcher) {
+      return
     }
+    this.eventsBatcher.track(
+      new FlagEvaluationEvent({
+        repoKey: this.repoKey,
+        commitSha: result.commitSHA,
+        featureSha: result.configSHA,
+        namespaceName: namespace,
+        featureName: key,
+        contextKeys: toContextKeysProto(ctx),
+        resultPath: result.evalResult.path,
+        clientEventTime: Timestamp.now(),
+      }),
+    )
+  }
+
+  async initialize() {
+    const registerResponse = await this.distClient.registerClient({
+      repoKey: this.repoKey,
+    })
+    this.sessionKey = registerResponse.sessionKey
+    await this.updateStore()
+    await this.eventsBatcher.init(this.sessionKey)
+  }
+
+  /**
+   * Not implemented
+   */
+  async reinitialize(): Promise<void> {}
+
+  /**
+   * Not implemented
+   *  */
+  async createConfig(): Promise<void> {}
+
+  async updateStore() {
+    const contentsResponse = await this.distClient.getRepositoryContents({
+      repoKey: this.repoKey,
+      sessionKey: this.sessionKey,
+    })
+    this.store.load(contentsResponse)
+  }
+
+  async shouldUpdateStore() {
+    const versionResponse = await this.distClient.getRepositoryVersion({
+      repoKey: this.repoKey,
+      sessionKey: this.sessionKey,
+    })
+    const currentSha = this.store.getCommitSHA()
+    return currentSha != versionResponse.commitSha
+  }
+
+  async close() {
+    this.closed = true
+    if (this.timeout) {
+      this.timeout.unref()
+    }
+    if (this.eventsBatcher) {
+      await this.eventsBatcher.close()
+    }
+    await this.distClient.deregisterClient({
+      sessionKey: this.sessionKey,
+    })
+  }
 }
-

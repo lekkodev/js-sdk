@@ -4,9 +4,10 @@ import {
 } from "./gen/lekko/client/v1beta1/configuration_service_pb"
 import { TransportClient } from "./client"
 import { ClientContext } from "./context/context"
-import { ClientTransportBuilder  } from "./transport-builder"
+import { ClientTransportBuilder } from "./transport-builder"
 import { type SyncClient, type Client } from "./types/client"
-import { Backend } from './memory/backend';
+import { Backend } from "./memory/backend"
+import { version } from "./version"
 
 interface APIOptions {
   apiKey: string
@@ -39,37 +40,35 @@ function initAPIClient(options: APIOptions): Client {
   )
 }
 
-type BackendOptions = {
+interface BackendOptions {
   apiKey?: string
-  hostname? : string
+  hostname?: string
   repositoryOwner: string
   repositoryName: string
   updateIntervalMs?: number
-  serverPort?: number,
+  serverPort?: number
 }
 
-const version = "0.2.0"
-
-function sdkVersion() : string {
-  const v = (version.startsWith('v')) ? version : `v${version}`;
-  return 'node-' + v;
+function sdkVersion(): string {
+  const v = version.startsWith("v") ? version : `v${version}`
+  return "js-" + v
 }
 
-async function initCachedAPIClient(options: BackendOptions): Promise<SyncClient> {
+async function initCachedAPIClient(
+  options: BackendOptions,
+): Promise<SyncClient> {
   const transport = new ClientTransportBuilder({
     hostname: options.hostname ?? "https://prod.api.lekko.dev",
-    apiKey: options.apiKey
-  }).build();
+    apiKey: options.apiKey,
+  }).build()
   const client = new Backend(
-    transport, 
-    options.repositoryOwner, 
-    options.repositoryName, 
+    transport,
+    options.repositoryOwner,
+    options.repositoryName,
     sdkVersion(),
-  );
-  console.log('about to initialize')
-  await client.initialize();
-  console.log('initialized in js sdk')
-  return client;
+  )
+  await client.initialize()
+  return client
 }
 
 export {
@@ -80,5 +79,5 @@ export {
   type Client,
   type SyncClient,
   RepositoryKey,
-  initCachedAPIClient
+  initCachedAPIClient,
 }
