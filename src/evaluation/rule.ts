@@ -7,13 +7,12 @@ import {
 import { type Value as LekkoValue } from "../gen/lekko/client/v1beta1/configuration_service_pb"
 import { type Value } from "@bufbuild/protobuf"
 import { type ClientContext } from "../context/context"
+import { h32 } from "xxhashjs"
 
 // If the hashed config value % 100 <= threshold, it fits in the "bucket".
 // In reality, we internally store the threshold as an integer in [0,100000]
 // to account for up to 3 decimal places.
 // The config value is salted using the namespace, config name, and context key.
-
-import CryptoJS from "crypto-js"
 
 export default function evaluateRule(
   rule: Rule | undefined,
@@ -104,10 +103,8 @@ export default function evaluateRule(
   throw new Error("unknown rule type")
 }
 
-function synchronousHash(data: Uint8Array): string {
-  const wordArray = CryptoJS.lib.WordArray.create([...data])
-  const hash = CryptoJS.SHA256(wordArray)
-  return hash.toString(CryptoJS.enc.Hex)
+function synchronousHash(data: Uint8Array) {
+  return h32(data, 0)
 }
 
 function evaluateBucket(
@@ -153,10 +150,8 @@ function evaluateBucket(
 
   const concatenatedBytes = concatenateTypedArrays(Uint8Array, bytesFrags)
 
-  const hashHex = synchronousHash(concatenatedBytes)
-  const hashNumber = parseInt(hashHex.slice(0, 15), 16) % 100000
-
-  return hashNumber <= bucketF.threshold
+  const hash = synchronousHash(concatenatedBytes)
+  return hash.toNumber() % 100000 <= bucketF.threshold
 }
 
 function concatenateTypedArrays(

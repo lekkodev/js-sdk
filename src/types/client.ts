@@ -1,7 +1,6 @@
 import { type Any } from "@bufbuild/protobuf"
 import { type ClientContext } from "../context/context"
 import { type RepositoryKey } from "../gen/lekko/client/v1beta1/configuration_service_pb"
-import { type ListContentsResponse } from "../gen/lekko/server/v1beta1/sdk_pb"
 
 export interface Client {
   repository: RepositoryKey
@@ -37,16 +36,6 @@ export interface Client {
     ctx?: ClientContext,
   ) => Promise<Any>
   close: () => Promise<void>
-}
-
-export interface DevClient {
-  listContents: () => ListContentsResponse
-  reinitialize: (options: { path?: string; force?: boolean }) => Promise<void>
-  createConfig: (
-    type: "bool" | "string" | "int" | "float" | "json",
-    namespace: string,
-    key: string,
-  ) => Promise<void>
 }
 
 export interface SyncClient {

@@ -970,6 +970,7 @@ __metadata:
     "@rollup/plugin-typescript": ^11.1.5
     "@types/crypto-js": ^4.2.2
     "@types/jest": ^29.5.5
+    "@types/xxhashjs": ^0.2.4
     "@typescript-eslint/eslint-plugin": ^6.4.0
     "@typescript-eslint/parser": ^6.7.4
     crypto-js: ^4.2.0
@@ -988,6 +989,7 @@ __metadata:
     ts-jest: ^29.1.1
     tslib: ^2.6.2
     typescript: ^5.2.2
+    xxhashjs: ^0.2.2
   languageName: unknown
   linkType: soft
 
@@ -1391,6 +1393,15 @@ __metadata:
   version: 2.0.1
   resolution: "@types/stack-utils@npm:2.0.1"
   checksum: 205fdbe3326b7046d7eaf5e494d8084f2659086a266f3f9cf00bccc549c8e36e407f88168ad4383c8b07099957ad669f75f2532ed4bc70be2b037330f7bae019
+  languageName: node
+  linkType: hard
+
+"@types/xxhashjs@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@types/xxhashjs@npm:0.2.4"
+  dependencies:
+    "@types/node": "*"
+  checksum: a199723436a5758ec5c4907ac934dbc400cee35154fbcfd981a7ca373b9be66a8ef9da8f9f3a3bdbceb0e18c2e2b6d47cf8ae4825196f6a68c094bd186ea629f
   languageName: node
   linkType: hard
 
@@ -2293,6 +2304,13 @@ __metadata:
   version: 4.2.0
   resolution: "crypto-js@npm:4.2.0"
   checksum: f051666dbc077c8324777f44fbd3aaea2986f198fe85092535130d17026c7c2ccf2d23ee5b29b36f7a4a07312db2fae23c9094b644cc35f7858b1b4fcaf27774
+  languageName: node
+  linkType: hard
+
+"cuint@npm:^0.2.2":
+  version: 0.2.2
+  resolution: "cuint@npm:0.2.2"
+  checksum: b8127a93a7f16ce120ffcb22108014327c9808b258ee20e7dbb4c6740d7cb0f0c12d18a054eb716b0f2470090666abaae8a082d3cd5ef0e94fa447dd155842c4
   languageName: node
   linkType: hard
 
@@ -6430,6 +6448,15 @@ __metadata:
     imurmurhash: ^0.1.4
     signal-exit: ^3.0.7
   checksum: 5da60bd4eeeb935eec97ead3df6e28e5917a6bd317478e4a85a5285e8480b8ed96032bbcc6ecd07b236142a24f3ca871c924ec4a6575e623ec1b11bf8c1c253c
+  languageName: node
+  linkType: hard
+
+"xxhashjs@npm:^0.2.2":
+  version: 0.2.2
+  resolution: "xxhashjs@npm:0.2.2"
+  dependencies:
+    cuint: ^0.2.2
+  checksum: cf6baf05bafe5651dbf108008bafdb1ebe972f65228633f00b56c49d7a1e614a821fe3345c4eb27462994c7c954d982eae05871be6a48146f30803dd87f3c3b6
   languageName: node
   linkType: hard
 

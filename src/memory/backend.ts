@@ -16,7 +16,7 @@ import {
   Value,
 } from "@bufbuild/protobuf"
 import { type ClientContext } from "../context/context"
-import { type DevClient, type SyncClient } from "../types/client"
+import { type SyncClient } from "../types/client"
 import { Store, type StoredEvalResult } from "./store"
 import { type ListContentsResponse } from "../gen/lekko/server/v1beta1/sdk_pb"
 import { EventsBatcher, toContextKeysProto } from "./events"
@@ -24,7 +24,7 @@ import { EventsBatcher, toContextKeysProto } from "./events"
 const eventsBatchSize = 100
 
 // An in-memory store that fetches configs from lekko's backend.
-export class Backend implements SyncClient, DevClient {
+export class Backend implements SyncClient {
   public repository: RepositoryKey
   distClient: PromiseClient<typeof DistributionService>
   store: Store
