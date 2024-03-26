@@ -37,3 +37,19 @@ export interface Client {
   ) => Promise<Any>
   close: () => Promise<void>
 }
+
+export interface SyncClient {
+  repository: RepositoryKey
+  getBool: (namespace: string, key: string, ctx?: ClientContext) => boolean
+  getInt: (namespace: string, key: string, ctx?: ClientContext) => bigint
+  getFloat: (namespace: string, key: string, ctx?: ClientContext) => number
+  getString: (namespace: string, key: string, ctx?: ClientContext) => string
+  getJSON: (
+    namespace: string,
+    key: string,
+    ctx?: ClientContext,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ) => any
+  getProto: (namespace: string, key: string, ctx?: ClientContext) => Any
+  close: () => Promise<void>
+}

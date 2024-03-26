@@ -5,7 +5,9 @@ import {
 import { TransportClient } from "./client"
 import { ClientContext } from "./context/context"
 import { ClientTransportBuilder } from "./transport-builder"
-import { type Client } from "./types/client"
+import { type SyncClient, type Client } from "./types/client"
+import { Backend } from "./memory/backend"
+import { version } from "./version"
 
 interface APIOptions {
   apiKey: string
@@ -38,11 +40,44 @@ function initAPIClient(options: APIOptions): Client {
   )
 }
 
+interface BackendOptions {
+  apiKey?: string
+  hostname?: string
+  repositoryOwner: string
+  repositoryName: string
+  updateIntervalMs?: number
+  serverPort?: number
+}
+
+function sdkVersion(): string {
+  const v = version.startsWith("v") ? version : `v${version}`
+  return "js-" + v
+}
+
+async function initCachedAPIClient(
+  options: BackendOptions,
+): Promise<SyncClient> {
+  const transport = new ClientTransportBuilder({
+    hostname: options.hostname ?? "https://app.lekko.com/api",
+    apiKey: options.apiKey,
+  }).build()
+  const client = new Backend(
+    transport,
+    options.repositoryOwner,
+    options.repositoryName,
+    sdkVersion(),
+  )
+  await client.initialize()
+  return client
+}
+
 export {
   ClientContext,
   TransportClient,
   Value,
   initAPIClient,
   type Client,
+  type SyncClient,
   RepositoryKey,
+  initCachedAPIClient,
 }
