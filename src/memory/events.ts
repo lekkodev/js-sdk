@@ -13,7 +13,7 @@ export class EventsBatcher {
   private sessionKey?: string
   private batch: FlagEvaluationEvent[]
   private readonly batchSize: number
-  private interval?: number
+  private interval?: number | NodeJS.Timeout
   private sendPromise?: Promise<void>
 
   constructor(
@@ -27,7 +27,7 @@ export class EventsBatcher {
 
   init(sessionKey: string): void {
     this.sessionKey = sessionKey
-    this.interval = window.setInterval(() => {
+    this.interval = globalThis.setInterval(() => {
       this.sendBatch().catch((error) => {
         console.error("Failed to send batch:", error)
       })
