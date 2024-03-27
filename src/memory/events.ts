@@ -8,12 +8,14 @@ import { type Value } from "../gen/lekko/client/v1beta1/configuration_service_pb
 import { type PromiseClient } from "@connectrpc/connect"
 import { type ClientContext } from "../context/context"
 
+const globalScope = typeof window !== "undefined" ? window : global
+
 export class EventsBatcher {
   private readonly distClient: PromiseClient<typeof DistributionService>
   private sessionKey?: string
   private batch: FlagEvaluationEvent[]
   private readonly batchSize: number
-  private interval?: number
+  private interval?: number | NodeJS.Timeout
   private sendPromise?: Promise<void>
 
   constructor(
@@ -27,7 +29,7 @@ export class EventsBatcher {
 
   init(sessionKey: string): void {
     this.sessionKey = sessionKey
-    this.interval = window.setInterval(() => {
+    this.interval = globalScope.setInterval(() => {
       this.sendBatch().catch((error) => {
         console.error("Failed to send batch:", error)
       })
