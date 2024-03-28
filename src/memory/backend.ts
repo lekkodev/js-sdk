@@ -1,6 +1,8 @@
 import { DistributionService } from "../gen/lekko/backend/v1beta1/distribution_service_connect"
-import { FlagEvaluationEvent } from "../gen/lekko/backend/v1beta1/distribution_service_pb"
+import { FlagEvaluationEvent, GetRepositoryContentsResponse } from "../gen/lekko/backend/v1beta1/distribution_service_pb"
 import { RepositoryKey } from "../gen/lekko/client/v1beta1/configuration_service_pb"
+import { createEnvelopeReadableStream } from "@connectrpc/connect/protocol"
+import { requestHeader, trailerFlag, trailerParse, validateResponse, validateTrailer, } from "@connectrpc/connect/protocol-grpc-web";
 import {
   type PromiseClient,
   type Transport,
@@ -133,10 +135,14 @@ export class Backend implements SyncClient {
   }
 
   async initialize() {
-    const registerResponse = await this.distClient.registerClient({
-      repoKey: this.repository,
-    })
-    this.sessionKey = registerResponse.sessionKey
+    if (!(document && document.getElementById('lekkoHidden'))) {
+      const registerResponse = await this.distClient.registerClient({
+        repoKey: this.repository,
+      })
+      this.sessionKey = registerResponse.sessionKey
+    } else {
+      this.sessionKey = "";
+    }
     await this.updateStore()
     this.eventsBatcher.init(this.sessionKey)
   }
@@ -152,10 +158,45 @@ export class Backend implements SyncClient {
   async createConfig(): Promise<void> {}
 
   async updateStore() {
-    const contentsResponse = await this.distClient.getRepositoryContents({
-      repoKey: this.repository,
-      sessionKey: this.sessionKey,
-    })
+    let contentsResponse = undefined;
+    if (document) {
+      const el = document.getElementById('lekkoHidden');
+      if (el && el.textContent) {
+        const binData = Uint8Array.from(el.textContent.split(',').map(Number));
+        const blob = new Blob([binData]);
+
+        const reader = createEnvelopeReadableStream(blob.stream()).getReader();
+        let trailer;
+        let message;
+        for (;;) {
+          const r = await reader.read();
+          if (r.done) {
+            break;
+          }
+          const { flags, data } = r.value;
+          if (flags === trailerFlag) {
+            if (trailer !== undefined) {
+              throw "extra trailer";
+            }
+            // Unary responses require exactly one response message, but in
+            // case of an error, it is perfectly valid to have a response body
+            // that only contains error trailers.
+            trailer = trailerParse(data);
+            continue;
+          }
+          if (message !== undefined) {
+            throw "extra message";
+          }
+          contentsResponse = GetRepositoryContentsResponse.fromBinary(data);
+        }
+      }
+    }
+    if (!contentsResponse) {
+      contentsResponse = await this.distClient.getRepositoryContents({
+        repoKey: this.repository,
+        sessionKey: this.sessionKey,
+      })
+    }
     this.store.load(contentsResponse).catch((e) => {
       console.log(`Error loading repository contents: ${e}`)
     })
