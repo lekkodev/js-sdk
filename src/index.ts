@@ -29,7 +29,7 @@ interface APIOptions {
 
 function initAPIClient(options: APIOptions): Client {
   const transport = new ClientTransportBuilder({
-    hostname: options.hostname ?? "https://app.lekko.com/api/",
+    hostname: options.hostname ?? "https://web.api.lekko.dev",
     apiKey: options.apiKey,
     localPath: options.localPath,
   }).build()
@@ -58,7 +58,7 @@ async function initCachedAPIClient(
   options: BackendOptions,
 ): Promise<SyncClient> {
   const transport = new ClientTransportBuilder({
-    hostname: options.hostname ?? "https://app.lekko.com/api",
+    hostname: options.hostname ?? "https://web.api.lekko.dev",
     apiKey: options.apiKey,
   }).build()
   const client = new Backend(
