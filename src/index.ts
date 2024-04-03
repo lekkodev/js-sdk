@@ -8,6 +8,8 @@ import { ClientTransportBuilder } from "./transport-builder"
 import { type SyncClient, type Client } from "./types/client"
 import { Backend } from "./memory/backend"
 import { version } from "./version"
+import { GetRepositoryContentsResponse } from "./gen/lekko/backend/v1beta1/distribution_service_pb"
+import { toUint8Array } from "js-base64"
 
 interface APIOptions {
   apiKey: string
@@ -71,6 +73,39 @@ async function initCachedAPIClient(
   return client
 }
 
+/**
+ * This method returns Backend explicitly and doesn't call initialize()
+ * and leaves it to the caller
+ * @internal Use for hydrated initialization
+ */
+function initAPIClientFromContents(
+  encodedContents: string,
+  options: BackendOptions,
+): Backend {
+  const transport = new ClientTransportBuilder({
+    hostname: options.hostname ?? "https://web.api.lekko.dev",
+    apiKey: options.apiKey,
+  }).build()
+  const client = new Backend(
+    transport,
+    options.repositoryOwner,
+    options.repositoryName,
+    sdkVersion(),
+  )
+  let contents: GetRepositoryContentsResponse
+  try {
+    contents = GetRepositoryContentsResponse.fromBinary(
+      toUint8Array(encodedContents),
+    )
+  } catch (e) {
+    throw new Error(
+      `Failed to deserialize repository contents: ${(e as Error).message}`,
+    )
+  }
+  client.store.load(contents)
+  return client
+}
+
 export {
   ClientContext,
   TransportClient,
@@ -80,4 +115,5 @@ export {
   type SyncClient,
   RepositoryKey,
   initCachedAPIClient,
+  initAPIClientFromContents,
 }

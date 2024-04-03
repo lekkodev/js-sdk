@@ -42,7 +42,7 @@ export class EventsBatcher {
   }
 
   async sendBatch(): Promise<void> {
-    if (this.batch.length === 0) {
+    if (this.batch.length === 0 || this.sessionKey === undefined) {
       return
     }
     if (this.sendPromise !== undefined) {

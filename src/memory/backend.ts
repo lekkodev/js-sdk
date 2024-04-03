@@ -132,33 +132,23 @@ export class Backend implements SyncClient {
       })
   }
 
-  async initialize() {
+  async initialize(fetchContents: boolean = true) {
     const registerResponse = await this.distClient.registerClient({
       repoKey: this.repository,
     })
     this.sessionKey = registerResponse.sessionKey
-    await this.updateStore()
+    if (fetchContents) {
+      await this.updateStore()
+    }
     this.eventsBatcher.init(this.sessionKey)
   }
-
-  /**
-   * Not implemented
-   */
-  async reinitialize(): Promise<void> {}
-
-  /**
-   * Not implemented
-   *  */
-  async createConfig(): Promise<void> {}
 
   async updateStore() {
     const contentsResponse = await this.distClient.getRepositoryContents({
       repoKey: this.repository,
       sessionKey: this.sessionKey,
     })
-    this.store.load(contentsResponse).catch((e) => {
-      console.log(`Error loading repository contents: ${e}`)
-    })
+    this.store.load(contentsResponse)
   }
 
   async shouldUpdateStore() {

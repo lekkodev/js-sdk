@@ -70,7 +70,7 @@ export class Store {
     return this.commitSHA
   }
 
-  async load(contents: GetRepositoryContentsResponse | undefined) {
+  load(contents: GetRepositoryContentsResponse | undefined) {
     if (contents === undefined) {
       return false
     }
