@@ -184,7 +184,7 @@ function evaluateEquals(
       if (ctxVal.kind.case === "doubleValue") {
         return ruleVal.kind.value === ctxVal.kind.value
       } else if (ctxVal.kind.case === "intValue") {
-        return BigInt(ruleVal.kind.value) === ctxVal.kind.value
+        return BigInt(ruleVal.kind.value) === BigInt(ctxVal.kind.value)
       }
       throw new Error("type mismatch, expecting double or int")
     }
