@@ -180,14 +180,14 @@ function evaluateEquals(
         return ruleVal.kind.value === ctxVal.kind.value
       }
       throw new Error("type mismatch, expecting boolean")
-    case "numberValue":
-      if (
-        ctxVal.kind.case === "doubleValue" ||
-        ctxVal.kind.case === "intValue"
-      ) {
+    case "numberValue": {
+      if (ctxVal.kind.case === "doubleValue") {
         return ruleVal.kind.value === ctxVal.kind.value
+      } else if (ctxVal.kind.case === "intValue") {
+        return BigInt(ruleVal.kind.value) === ctxVal.kind.value
       }
       throw new Error("type mismatch, expecting double or int")
+    }
     case "stringValue":
       if (ctxVal.kind.case === "stringValue") {
         return ruleVal.kind.value === ctxVal.kind.value
