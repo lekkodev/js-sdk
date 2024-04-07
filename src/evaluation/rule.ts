@@ -167,7 +167,7 @@ function concatenateTypedArrays(
   return result
 }
 
-function compareNumbers(a: number | bigint, b: number | bigint) {
+export function compareNumbers(a: number | bigint, b: number | bigint) {
   if (typeof a === typeof b) {
     return a === b
   }
@@ -297,8 +297,6 @@ function evaluateContainedWithin(
   }
   switch (ruleVal.kind.case) {
     case "listValue": {
-      console.log("list val")
-      console.log(ruleVal.kind.value.values)
       return ruleVal.kind.value.values.some((listElemVal) =>
         evaluateEquals(listElemVal, ctxVal),
       )
