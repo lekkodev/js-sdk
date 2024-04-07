@@ -186,7 +186,7 @@ export function compareNumbers(a: number | bigint, b: number | bigint) {
     }
   }
 
-  throw new Error("type mismatch, expecting double or int")
+  throw new Error("type mismatch, expecting double, bigint, or int")
 }
 
 function evaluateEquals(
