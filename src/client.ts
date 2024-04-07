@@ -120,6 +120,7 @@ export class TransportClient implements Client {
     Object.assign(req.context, this.baseContext.data, ctx.data)
     const res = await this.client.getProtoValue(req)
     if (res.valueV2 !== undefined) {
+      console.log("getting proto")
       return new Any({
         typeUrl: res.valueV2.typeUrl,
         value: res.valueV2.value,
