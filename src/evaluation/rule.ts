@@ -167,6 +167,28 @@ function concatenateTypedArrays(
   return result
 }
 
+export function compareNumbers(a: number | bigint, b: number | bigint) {
+  if (typeof a === typeof b) {
+    return a === b
+  }
+
+  if (typeof a === "bigint" && typeof b === "number") {
+    if (b % 1 === 0) {
+      return a === BigInt(b)
+    } else {
+      return false
+    }
+  } else if (typeof b === "bigint" && typeof a === "number") {
+    if (a % 1 === 0) {
+      return BigInt(a) === b
+    } else {
+      return false
+    }
+  }
+
+  throw new Error("type mismatch, expecting double, bigint, or int")
+}
+
 function evaluateEquals(
   ruleVal: Value | undefined,
   ctxVal: LekkoValue,
@@ -180,14 +202,15 @@ function evaluateEquals(
         return ruleVal.kind.value === ctxVal.kind.value
       }
       throw new Error("type mismatch, expecting boolean")
-    case "numberValue":
+    case "numberValue": {
       if (
         ctxVal.kind.case === "doubleValue" ||
         ctxVal.kind.case === "intValue"
       ) {
-        return ruleVal.kind.value === ctxVal.kind.value
+        return compareNumbers(ruleVal.kind.value, ctxVal.kind.value)
       }
       throw new Error("type mismatch, expecting double or int")
+    }
     case "stringValue":
       if (ctxVal.kind.case === "stringValue") {
         return ruleVal.kind.value === ctxVal.kind.value
@@ -273,10 +296,11 @@ function evaluateContainedWithin(
     throw new Error("value is undefined")
   }
   switch (ruleVal.kind.case) {
-    case "listValue":
+    case "listValue": {
       return ruleVal.kind.value.values.some((listElemVal) =>
         evaluateEquals(listElemVal, ctxVal),
       )
+    }
     default:
       throw new Error(
         "type mismatch: expecting list for operator contained within",
