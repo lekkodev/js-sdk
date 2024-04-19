@@ -106,11 +106,12 @@ export class Store {
             try {
               let [fid, wireType] = reader.tag()
               if (fid == fieldNumber) {
+                const bytes = wireType == WireType.LengthDelimited ? reader.bytes() : reader.skip(wireType);
                 evalResult.value = new Any({
                   typeUrl: typeUrl,
                   value: new BinaryWriter()
                     .tag(1, WireType.LengthDelimited)
-                    .bytes(reader.bytes())
+                    .bytes(bytes)
                     .finish(),
                 })
                 break
