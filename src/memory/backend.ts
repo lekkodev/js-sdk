@@ -10,6 +10,7 @@ import {
   type Any,
   BoolValue,
   DoubleValue,
+  type IMessageTypeRegistry,
   Int64Value,
   StringValue,
   Timestamp,
@@ -33,15 +34,18 @@ export class Backend implements SyncClient {
   timeout?: NodeJS.Timeout
   eventsBatcher: EventsBatcher
   version: string
+  registry: IMessageTypeRegistry | undefined
 
   constructor(
     transport: Transport,
     repositoryOwner: string,
     repositoryName: string,
     version: string,
+    registry?: IMessageTypeRegistry,
+    store?: Store,
   ) {
     this.distClient = createPromiseClient(DistributionService, transport)
-    this.store = new Store(repositoryOwner, repositoryName)
+    this.store = store ?? new Store(repositoryOwner, repositoryName)
     this.repository = RepositoryKey.fromJson({
       ownerName: repositoryOwner,
       repoName: repositoryName,
@@ -49,6 +53,20 @@ export class Backend implements SyncClient {
     this.closed = false
     this.version = version
     this.eventsBatcher = new EventsBatcher(this.distClient, eventsBatchSize)
+    this.registry = registry
+  }
+
+  get(namespace: string, key: string, ctx?: ClientContext): unknown {
+    if (this.registry == null) {
+      throw new Error("Must initialize with registry to use get")
+    }
+    const result = this.store.evaluateType(namespace, key, ctx)
+    const innerResult = result.evalResult.value.unpack(this.registry)
+    if (innerResult === undefined) {
+      throw new Error("type mismatch")
+    }
+    this.track(namespace, key, result, ctx)
+    return innerResult
   }
 
   getBool(namespace: string, key: string, ctx?: ClientContext): boolean {

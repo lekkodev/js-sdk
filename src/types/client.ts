@@ -51,5 +51,6 @@ export interface SyncClient {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) => any
   getProto: (namespace: string, key: string, ctx?: ClientContext) => Any
+  get: (namespace: string, key: string, ctx?: ClientContext) => unknown
   close: () => Promise<void>
 }
