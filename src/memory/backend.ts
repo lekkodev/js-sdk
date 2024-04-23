@@ -16,7 +16,7 @@ import {
   Timestamp,
   Value,
 } from "@bufbuild/protobuf"
-import { type ClientContext } from "../context/context"
+import { ClientContext } from "../context/context"
 import { type SyncClient } from "../types/client"
 import { Store, type StoredEvalResult } from "./store"
 import { type ListContentsResponse } from "../gen/lekko/server/v1beta1/sdk_pb"
@@ -69,38 +69,67 @@ export class Backend implements SyncClient {
     return innerResult
   }
 
-  getBool(namespace: string, key: string, ctx?: ClientContext): boolean {
+  getBool(
+    namespace: string,
+    key: string,
+    ctx?: ClientContext | { [key: string]: string | number | boolean },
+  ): boolean {
     const wrapper = new BoolValue()
     this.evaluateAndUnpack(namespace, key, wrapper, ctx)
     return wrapper.value
   }
 
-  getInt(namespace: string, key: string, ctx?: ClientContext): bigint {
+  getInt(
+    namespace: string,
+    key: string,
+    ctx?: ClientContext | { [key: string]: string | number | boolean },
+  ): bigint {
     const wrapper = new Int64Value()
     this.evaluateAndUnpack(namespace, key, wrapper, ctx)
     return wrapper.value
   }
 
-  getFloat(namespace: string, key: string, ctx?: ClientContext): number {
+  getFloat(
+    namespace: string,
+    key: string,
+    ctx?: ClientContext | { [key: string]: string | number | boolean },
+  ): number {
     const wrapper = new DoubleValue()
     this.evaluateAndUnpack(namespace, key, wrapper, ctx)
     return wrapper.value
   }
 
-  getString(namespace: string, key: string, ctx?: ClientContext): string {
+  getString(
+    namespace: string,
+    key: string,
+    ctx?: ClientContext | { [key: string]: string | number | boolean },
+  ): string {
     const wrapper = new StringValue()
     this.evaluateAndUnpack(namespace, key, wrapper, ctx)
     return wrapper.value
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getJSON(namespace: string, key: string, ctx?: ClientContext): any {
+  getJSON(
+    namespace: string,
+    key: string,
+    ctx?: ClientContext | { [key: string]: string | number | boolean },
+  ): any {
     const wrapper = new Value()
     this.evaluateAndUnpack(namespace, key, wrapper, ctx)
     return JSON.parse(wrapper.toJsonString())
   }
 
-  getProto(namespace: string, key: string, ctx?: ClientContext): Any {
+  getProto(
+    namespace: string,
+    key: string,
+    ctx?: ClientContext | { [key: string]: string | number | boolean },
+  ): Any {
+    if (!ctx) {
+      ctx = new ClientContext()
+    } else if (!(ctx instanceof ClientContext)) {
+      ctx = ClientContext.fromJSON(ctx)
+    }
     const result = this.store.evaluateType(namespace, key, ctx)
     this.track(namespace, key, result, ctx)
     return result.evalResult.value
@@ -114,8 +143,13 @@ export class Backend implements SyncClient {
     namespace: string,
     configKey: string,
     wrapper: BoolValue | StringValue | Int64Value | DoubleValue | Value,
-    ctx?: ClientContext,
+    ctx?: ClientContext | { [key: string]: string | number | boolean },
   ) {
+    if (!ctx) {
+      ctx = new ClientContext()
+    } else if (!(ctx instanceof ClientContext)) {
+      ctx = ClientContext.fromJSON(ctx)
+    }
     const result = this.store.evaluateType(namespace, configKey, ctx)
     if (result.evalResult.value.unpackTo(wrapper) === undefined) {
       throw new Error("type mismatch")

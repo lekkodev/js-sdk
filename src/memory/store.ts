@@ -7,6 +7,13 @@ import {
 } from "../gen/lekko/server/v1beta1/sdk_pb"
 import { type ClientContext } from "../context/context"
 import { type EvaluationResult, evaluate } from "../evaluation/eval"
+import { Any } from "@bufbuild/protobuf"
+import {
+  BinaryWriter,
+  WireType,
+  protoBase64,
+  BinaryReader,
+} from "@bufbuild/protobuf"
 
 interface configData {
   configSHA: string
@@ -58,11 +65,70 @@ export class Store {
     configKey: string,
     context?: ClientContext,
   ): StoredEvalResult {
-    const cfg = this.get(namespace, configKey)
-    return {
-      ...cfg,
-      commitSHA: this.getCommitSHA(),
-      evalResult: evaluate(cfg.config, namespace, context),
+    let fieldNumber = undefined
+    let typeUrl = undefined
+    while (true) {
+      const cfg = this.get(namespace, configKey)
+      let evalResult = evaluate(cfg.config, namespace, context)
+      if (
+        evalResult.value.typeUrl ===
+        "type.googleapis.com/lekko.protobuf.ConfigCall"
+      ) {
+        const reader = new BinaryReader(evalResult.value.value)
+        while (true) {
+          try {
+            let [fid, wireType] = reader.tag()
+            switch (fid) {
+              case 1:
+                typeUrl = reader.string()
+                break
+              case 2:
+                namespace = reader.string()
+                break
+              case 3:
+                configKey = reader.string()
+                break
+              case 4:
+                fieldNumber = reader.uint32()
+                break
+              default:
+                reader.skip(wireType)
+            }
+          } catch (e) {
+            break // there has to be a better way right?
+          }
+        }
+      } else {
+        if (fieldNumber) {
+          const reader = new BinaryReader(evalResult.value.value)
+          while (true) {
+            // TODO fucking default fields
+            try {
+              let [fid, wireType] = reader.tag()
+              if (fid == fieldNumber) {
+                const bytes = wireType == WireType.LengthDelimited ? reader.bytes() : reader.skip(wireType);
+                evalResult.value = new Any({
+                  typeUrl: typeUrl,
+                  value: new BinaryWriter()
+                    .tag(1, WireType.LengthDelimited)
+                    .bytes(bytes)
+                    .finish(),
+                })
+                break
+              } else {
+                reader.skip(wireType)
+              }
+            } catch {
+              break
+            }
+          }
+        }
+        return {
+          ...cfg, // Why?... This is really slow and probably shouldn't be re-used... I also break this right now..
+          commitSHA: this.getCommitSHA(),
+          evalResult: evalResult,
+        }
+      }
     }
   }
 
