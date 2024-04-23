@@ -1,3 +1,4 @@
+import snakeCase from "lodash.snakecase"
 import { Value } from "../gen/lekko/client/v1beta1/configuration_service_pb"
 
 type ContextKey = string
@@ -17,22 +18,25 @@ class ClientContext {
       return ctx
     }
     Object.entries(jsonContext).forEach(([k, v]) => {
+      // For evaluation across languages, we proto-fy keys here
+      // (alternatively, we could js-fy in eval logic)
+      const casedK = snakeCase(k)
       switch (typeof v) {
         case "number": {
           // TODO: `1.0` is still integer in js :(
           if (Number.isInteger(v)) {
-            ctx.setInt(k, v)
+            ctx.setInt(casedK, v)
           } else {
-            ctx.setDouble(k, v)
+            ctx.setDouble(casedK, v)
           }
           break
         }
         case "string": {
-          ctx.setString(k, v)
+          ctx.setString(casedK, v)
           break
         }
         case "boolean": {
-          ctx.setBoolean(k, v)
+          ctx.setBoolean(casedK, v)
           break
         }
       }
