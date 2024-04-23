@@ -2663,7 +2663,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-standard-with-typescript@npm:latest":
+eslint-config-standard-with-typescript@latest:
   version: 43.0.1
   resolution: "eslint-config-standard-with-typescript@npm:43.0.1"
   dependencies:
