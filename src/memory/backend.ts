@@ -18,7 +18,7 @@ import {
 } from "@bufbuild/protobuf"
 import { ClientContext } from "../context/context"
 import { type SyncClient } from "../types/client"
-import { Store, type StoredEvalResult } from "./store"
+import { Store, configMap, type StoredEvalResult } from "./store"
 import { type ListContentsResponse } from "../gen/lekko/server/v1beta1/sdk_pb"
 import { EventsBatcher, toContextKeysProto } from "./events"
 
@@ -137,6 +137,10 @@ export class Backend implements SyncClient {
 
   listContents(): ListContentsResponse {
     return this.store.listContents()
+  }
+
+  getConfigs(): configMap {
+    return this.store.configs
   }
 
   evaluateAndUnpack(

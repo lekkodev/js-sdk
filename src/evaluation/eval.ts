@@ -103,7 +103,7 @@ function traverse(
   }
 }
 
-function getValue(val: Any | undefined, valNew: LekkoAny | undefined): Any {
+export function getValue(val: Any | undefined, valNew: LekkoAny | undefined): Any {
   if (valNew !== undefined) {
     return new Any({
       typeUrl: valNew.typeUrl,

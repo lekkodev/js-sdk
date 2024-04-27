@@ -15,12 +15,12 @@ import {
   BinaryReader,
 } from "@bufbuild/protobuf"
 
-interface configData {
+export interface configData {
   configSHA: string
   config: Feature
 }
 
-type configMap = Map<string, Map<string, configData>>
+export type configMap = Map<string, Map<string, configData>>
 
 export class NotFoundError extends Error {
   constructor(resType: "namespace" | "config", name: string) {
@@ -36,7 +36,7 @@ export interface StoredEvalResult {
 }
 
 export class Store {
-  configs: configMap
+  public configs: configMap
   commitSHA: string
   ownerName: string
   repoName: string
