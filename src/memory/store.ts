@@ -7,13 +7,7 @@ import {
 } from "../gen/lekko/server/v1beta1/sdk_pb"
 import { type ClientContext } from "../context/context"
 import { type EvaluationResult, evaluate } from "../evaluation/eval"
-import { Any } from "@bufbuild/protobuf"
-import {
-  BinaryWriter,
-  WireType,
-  protoBase64,
-  BinaryReader,
-} from "@bufbuild/protobuf"
+import { Any, BinaryWriter, WireType, BinaryReader } from "@bufbuild/protobuf"
 
 export interface configData {
   configSHA: string
@@ -65,11 +59,11 @@ export class Store {
     configKey: string,
     context?: ClientContext,
   ): StoredEvalResult {
-    let fieldNumber = undefined
-    let typeUrl = undefined
+    let fieldNumber
+    let typeUrl
     while (true) {
       const cfg = this.get(namespace, configKey)
-      let evalResult = evaluate(cfg.config, namespace, context)
+      const evalResult = evaluate(cfg.config, namespace, context)
       if (
         evalResult.value.typeUrl ===
         "type.googleapis.com/lekko.protobuf.ConfigCall"
@@ -77,7 +71,7 @@ export class Store {
         const reader = new BinaryReader(evalResult.value.value)
         while (true) {
           try {
-            let [fid, wireType] = reader.tag()
+            const [fid, wireType] = reader.tag()
             switch (fid) {
               case 1:
                 typeUrl = reader.string()
@@ -104,11 +98,14 @@ export class Store {
           while (true) {
             // TODO fucking default fields
             try {
-              let [fid, wireType] = reader.tag()
+              const [fid, wireType] = reader.tag()
               if (fid == fieldNumber) {
-                const bytes = wireType == WireType.LengthDelimited ? reader.bytes() : reader.skip(wireType);
+                const bytes =
+                  wireType == WireType.LengthDelimited
+                    ? reader.bytes()
+                    : reader.skip(wireType)
                 evalResult.value = new Any({
-                  typeUrl: typeUrl,
+                  typeUrl,
                   value: new BinaryWriter()
                     .tag(1, WireType.LengthDelimited)
                     .bytes(bytes)
@@ -126,7 +123,7 @@ export class Store {
         return {
           ...cfg, // Why?... This is really slow and probably shouldn't be re-used... I also break this right now..
           commitSHA: this.getCommitSHA(),
-          evalResult: evalResult,
+          evalResult,
         }
       }
     }

@@ -6,9 +6,8 @@ import {
 } from "../gen/lekko/rules/v1beta3/rules_pb"
 import { type Value as LekkoValue } from "../gen/lekko/client/v1beta1/configuration_service_pb"
 import { type Value } from "@bufbuild/protobuf"
-import { ClientContext } from "../context/context"
+import { type ClientContext } from "../context/context"
 import { h32 } from "xxhashjs"
-
 
 // If the hashed config value % 100 <= threshold, it fits in the "bucket".
 // In reality, we internally store the threshold as an integer in [0,100000]

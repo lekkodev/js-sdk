@@ -10,8 +10,11 @@ import { Backend } from "./memory/backend"
 import { version } from "./version"
 import { GetRepositoryContentsResponse } from "./gen/lekko/backend/v1beta1/distribution_service_pb"
 import { toUint8Array } from "js-base64"
-import { configMap } from "./memory/store"
-import { type ConfigCombination, getNamespaceCombinations } from "./evaluation/combinations"
+import { type configMap } from "./memory/store"
+import {
+  type ConfigCombination,
+  getNamespaceCombinations,
+} from "./evaluation/combinations"
 
 interface APIOptions {
   apiKey: string
@@ -57,7 +60,6 @@ function sdkVersion(): string {
   const v = version.startsWith("v") ? version : `v${version}`
   return "js-" + v
 }
-
 
 async function initCachedAPIClient(
   options: BackendOptions,
@@ -121,5 +123,5 @@ export {
   initAPIClientFromContents,
   type configMap,
   getNamespaceCombinations,
-  type ConfigCombination
+  type ConfigCombination,
 }

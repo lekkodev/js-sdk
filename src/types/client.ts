@@ -1,8 +1,7 @@
 import { type Any } from "@bufbuild/protobuf"
 import { type ClientContext } from "../context/context"
 import { type RepositoryKey } from "../gen/lekko/client/v1beta1/configuration_service_pb"
-import { ListContentsResponse } from "../gen/lekko/server/v1beta1/sdk_pb"
-import { configMap } from "../memory/store"
+import { type configMap } from "../memory/store"
 
 export interface Client {
   repository: RepositoryKey
@@ -54,6 +53,6 @@ export interface SyncClient {
   ) => any
   getProto: (namespace: string, key: string, ctx?: ClientContext) => Any
   get: (namespace: string, key: string, ctx?: ClientContext) => unknown
-  getConfigs(): configMap
+  getConfigs: () => configMap
   close: () => Promise<void>
 }
