@@ -15,6 +15,12 @@ import {
 } from "../gen/lekko/feature/v1beta1/feature_pb"
 import { evaluate, getValue } from "./eval"
 import { type configData } from "../memory/store"
+import {
+  type CallExpression,
+  ComparisonOperator,
+  LogicalOperator,
+  type Rule,
+} from "../gen/lekko/rules/v1beta3/rules_pb"
 
 export type JSONValue =
   | number
@@ -115,8 +121,37 @@ export function getConstraintValue(constraint: Constraint) {
   return getSimpleValue(value)
 }
 
+type Result = string | number | boolean
+
+interface ResultSetRaw {
+  result: Result
+  constraints: Constraint[]
+  default: boolean
+}
+
+interface ResultSet {
+  result: Result
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  serialized: any
+  default: boolean
+}
+
+function serializeResultSet(resultSetRaw: ResultSetRaw): ResultSet {
+  const serialized = resultSetRaw.constraints.flatMap((constraint) =>
+    constraint.ruleAstNew === undefined
+      ? []
+      : [serializeRule(constraint.ruleAstNew)],
+  )
+
+  return {
+    result: resultSetRaw.result,
+    serialized,
+    default: resultSetRaw.default,
+  }
+}
+
 export function getConfigCombinations(config: Feature) {
-  const combinationsSet = new Set<Result>()
+  const combinations: ResultSetRaw[] = []
 
   if (config.tree === undefined) return []
   const constraints = config.tree.constraints ?? []
@@ -126,34 +161,48 @@ export function getConfigCombinations(config: Feature) {
     return []
   }
 
-  combinationsSet.add(
-    getSimpleValue(getValue(config.tree.default, config.tree.defaultNew)),
-  )
-
-  constraints.forEach((constraint) => {
-    combinationsSet.add(getConstraintValue(constraint))
+  combinations.push({
+    result: getSimpleValue(
+      getValue(config.tree.default, config.tree.defaultNew),
+    ),
+    constraints: [],
+    default: true,
   })
 
-  return [...combinationsSet]
-}
+  constraints.forEach((constraint) => {
+    const result = getConstraintValue(constraint)
+    const existingResultSet = combinations.find(
+      (combination) => combination.result === result,
+    )
+    if (existingResultSet !== undefined) {
+      existingResultSet.constraints.push(constraint)
+    } else {
+      combinations.push({
+        result,
+        constraints: [constraint],
+        default: false,
+      })
+    }
+  })
 
-type Result = string | number | boolean
+  return combinations.map(serializeResultSet)
+}
 
 export interface ConfigCombination {
   configName: string
-  value: Result
+  value: ResultSet
 }
 
 export interface Grouping {
-  configResults: Record<string, Result>
+  configResults: Record<string, ResultSet>
   evaluatedContextPercentage: number
   exampleContext?: JSONClientContext
 }
 
 function convertToRecord(
   combinations: ConfigCombination[],
-): Record<string, Result> {
-  return combinations.reduce<Record<string, Result>>((acc, combination) => {
+): Record<string, ResultSet> {
+  return combinations.reduce<Record<string, ResultSet>>((acc, combination) => {
     acc[combination.configName] = combination.value
     return acc
   }, {})
@@ -164,7 +213,7 @@ export function getNamespaceCombinations(
   excludedConfigNames: string[],
   contextSamples?: ClientContext[],
 ): Grouping[] {
-  const allConfigs: Array<{ configName: string; values: Result[] }> =
+  const allConfigs: Array<{ configName: string; values: ResultSet[] }> =
     Array.from(configs.entries())
       .map(([configName, configData]) => ({
         configName,
@@ -181,7 +230,7 @@ export function getNamespaceCombinations(
   }
 
   const cartesianProduct = (
-    arr: Array<{ configName: string; values: Result[] }>,
+    arr: Array<{ configName: string; values: ResultSet[] }>,
     result: ConfigCombination[][],
     index: number = 0,
     current: ConfigCombination[] = [],
@@ -217,15 +266,26 @@ export function getNamespaceCombinations(
   )
 }
 
+// result sets are not serializable because of the constraints
+function getCombinationKey(combination: Record<string, ResultSet>): string {
+  const resultOnlyRecord: Record<string, Result> = {}
+
+  for (const [key, resultSet] of Object.entries(combination)) {
+    resultOnlyRecord[key] = resultSet.result
+  }
+
+  return JSON.stringify(resultOnlyRecord)
+}
+
 export function evaluateAndGroupConfigurations(
   configs: Feature[],
-  initialResults: Array<Record<string, Result>>,
+  initialResults: Array<Record<string, ResultSet>>,
   contextSamples: ClientContext[] = [],
 ): Grouping[] {
   const groupingsMap = new Map<string, Grouping>()
 
   initialResults.forEach((result) => {
-    const resultKey = JSON.stringify(result)
+    const resultKey = getCombinationKey(result)
     groupingsMap.set(resultKey, {
       configResults: result,
       evaluatedContextPercentage: 0,
@@ -249,4 +309,58 @@ export function evaluateAndGroupConfigurations(
   })
 
   return Array.from(groupingsMap.values())
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function serializeRule(rule: Rule): any {
+  switch (rule.rule.case) {
+    case "atom":
+      return {
+        type: "Atom",
+        contextKey: rule.rule.value.contextKey,
+        operator: ComparisonOperator[rule.rule.value.comparisonOperator],
+        value: rule.rule.value.comparisonValue?.toString() ?? "undefined",
+      }
+    case "not":
+      return {
+        type: "Not",
+        rule: serializeRule(rule.rule.value),
+      }
+    case "logicalExpression":
+      return {
+        type: "LogicalExpression",
+        operator: LogicalOperator[rule.rule.value.logicalOperator],
+        rules: rule.rule.value.rules.map(serializeRule),
+      }
+    case "boolConst":
+      return {
+        type: "Boolean",
+        value: rule.rule.value,
+      }
+    case "callExpression":
+      return serializeCallExpression(rule.rule.value)
+    default:
+      return { error: "Unknown Rule Type" }
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function serializeCallExpression(callExpr: CallExpression): any {
+  switch (callExpr.function.case) {
+    case "bucket":
+      return {
+        type: "Bucket",
+        contextKey: callExpr.function.value.contextKey,
+        threshold: callExpr.function.value.threshold,
+      }
+    case "evaluateTo":
+      return {
+        type: "EvaluateTo",
+        configName: callExpr.function.value.configName,
+        configValue:
+          callExpr.function.value.configValue?.toString() ?? "undefined",
+      }
+    default:
+      return { error: "Unknown Function Type" }
+  }
 }
