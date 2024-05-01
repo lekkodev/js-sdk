@@ -229,7 +229,6 @@ export function getNamespaceCombinations(
         values: getConfigCombinations(configData.config),
       }))
       .filter((config) => {
-        console.log(config)
         return (
           config.values.length > 0 &&
           !excludedConfigNames.includes(config.configName)
