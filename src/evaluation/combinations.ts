@@ -10,6 +10,7 @@ import {
 } from "@bufbuild/protobuf"
 import { type ClientContext } from "../context/context"
 import {
+  FeatureType,
   type Constraint,
   type Feature,
 } from "../gen/lekko/feature/v1beta1/feature_pb"
@@ -153,7 +154,7 @@ function serializeResultSet(resultSetRaw: ResultSetRaw): ResultSet {
 export function getConfigCombinations(config: Feature) {
   const combinations: ResultSetRaw[] = []
 
-  if (config.tree === undefined) return []
+  if (config.tree === undefined || config.type === FeatureType.PROTO) return []
   const constraints = config.tree.constraints ?? []
 
   // if there is only a default it cannot generate combinations against other features
@@ -184,6 +185,14 @@ export function getConfigCombinations(config: Feature) {
       })
     }
   })
+
+  const allResultsAreEqual = combinations.every(
+    (combination) => combination.result === combinations[0].result,
+  )
+
+  if (allResultsAreEqual) {
+    return []
+  }
 
   return combinations.map(serializeResultSet)
 }
@@ -219,11 +228,13 @@ export function getNamespaceCombinations(
         configName,
         values: getConfigCombinations(configData.config),
       }))
-      .filter(
-        (config) =>
+      .filter((config) => {
+        console.log(config)
+        return (
           config.values.length > 0 &&
-          !excludedConfigNames.includes(config.configName),
-      )
+          !excludedConfigNames.includes(config.configName)
+        )
+      })
 
   if (allConfigs.length === 0) {
     return []
