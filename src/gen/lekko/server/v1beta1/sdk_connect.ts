@@ -17,8 +17,8 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { ListContentsRequest, ListContentsResponse } from "./sdk_pb"
-import { MethodKind } from "@bufbuild/protobuf"
+import { ListContentsRequest, ListContentsResponse } from "./sdk_pb";
+import { MethodKind } from "@bufbuild/protobuf";
 
 /**
  * Web service for debugging the contents of cached sdks.
@@ -39,5 +39,6 @@ export const SDKService = {
       O: ListContentsResponse,
       kind: MethodKind.Unary,
     },
-  },
-} as const
+  }
+} as const;
+

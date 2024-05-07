@@ -9,10 +9,12 @@ import { type ClientContext } from "../context/context"
 import { type EvaluationResult, evaluate } from "../evaluation/eval"
 import { Any } from "@bufbuild/protobuf"
 import {
+  createRegistryFromDescriptors,
   BinaryWriter,
   WireType,
   protoBase64,
   BinaryReader,
+  type IMessageTypeRegistry,
 } from "@bufbuild/protobuf"
 
 interface configData {
@@ -40,6 +42,7 @@ export class Store {
   commitSHA: string
   ownerName: string
   repoName: string
+  registry: IMessageTypeRegistry | undefined
 
   constructor(ownerName: string, repoName: string) {
     this.configs = new Map()
@@ -155,6 +158,9 @@ export class Store {
     })
     this.configs = newConfigs
     this.commitSHA = contents.commitSha
+    if (contents.fileDescriptorSet) {
+      this.registry = createRegistryFromDescriptors(contents.fileDescriptorSet)
+    }
     return true
   }
 
