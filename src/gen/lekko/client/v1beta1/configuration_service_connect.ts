@@ -17,25 +17,8 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import {
-  DeregisterRequest,
-  DeregisterResponse,
-  GetBoolValueRequest,
-  GetBoolValueResponse,
-  GetFloatValueRequest,
-  GetFloatValueResponse,
-  GetIntValueRequest,
-  GetIntValueResponse,
-  GetJSONValueRequest,
-  GetJSONValueResponse,
-  GetProtoValueRequest,
-  GetProtoValueResponse,
-  GetStringValueRequest,
-  GetStringValueResponse,
-  RegisterRequest,
-  RegisterResponse,
-} from "./configuration_service_pb"
-import { MethodKind } from "@bufbuild/protobuf"
+import { DeregisterRequest, DeregisterResponse, GetBoolValueRequest, GetBoolValueResponse, GetFloatValueRequest, GetFloatValueResponse, GetIntValueRequest, GetIntValueResponse, GetJSONValueRequest, GetJSONValueResponse, GetProtoValueRequest, GetProtoValueResponse, GetStringValueRequest, GetStringValueResponse, RegisterRequest, RegisterResponse } from "./configuration_service_pb";
+import { MethodKind } from "@bufbuild/protobuf";
 
 /**
  * Initial implementation of a feature flagging service.
@@ -124,5 +107,6 @@ export const ConfigurationService = {
       O: DeregisterResponse,
       kind: MethodKind.Unary,
     },
-  },
-} as const
+  }
+} as const;
+

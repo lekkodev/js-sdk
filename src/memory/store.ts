@@ -7,7 +7,14 @@ import {
 } from "../gen/lekko/server/v1beta1/sdk_pb"
 import { type ClientContext } from "../context/context"
 import { type EvaluationResult, evaluate } from "../evaluation/eval"
-import { Any, BinaryWriter, WireType, BinaryReader } from "@bufbuild/protobuf"
+import { Any } from "@bufbuild/protobuf"
+import {
+  createRegistryFromDescriptors,
+  BinaryWriter,
+  WireType,
+  BinaryReader,
+  type IMessageTypeRegistry,
+} from "@bufbuild/protobuf"
 
 export interface configData {
   configSHA: string
@@ -34,6 +41,7 @@ export class Store {
   commitSHA: string
   ownerName: string
   repoName: string
+  registry: IMessageTypeRegistry | undefined
 
   constructor(ownerName: string, repoName: string) {
     this.configs = new Map()
@@ -152,6 +160,9 @@ export class Store {
     })
     this.configs = newConfigs
     this.commitSHA = contents.commitSha
+    if (contents.fileDescriptorSet) {
+      this.registry = createRegistryFromDescriptors(contents.fileDescriptorSet)
+    }
     return true
   }
 
