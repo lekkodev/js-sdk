@@ -7,6 +7,7 @@ import {
   type MessageType,
   StringValue,
   Value,
+  type JsonValue,
 } from "@bufbuild/protobuf"
 import { type ClientContext } from "../context/context"
 import {
@@ -22,6 +23,7 @@ import {
   LogicalOperator,
   type Rule,
 } from "../gen/lekko/rules/v1beta3/rules_pb"
+import { type SyncClient } from "../types/client"
 
 export type JSONValue =
   | number
@@ -90,7 +92,7 @@ export function unpackTo(a: Any, m: Message): boolean {
   return true
 }
 
-export function getSimpleValue(value: Any): Result {
+export function getSimpleValue(value: Any, client: SyncClient): Result {
   if (is(value, BoolValue)) {
     const bv = new BoolValue()
     unpackTo(value, bv)
@@ -113,16 +115,21 @@ export function getSimpleValue(value: Any): Result {
     return v.toJsonString()
   }
 
+  if (client.store.registry !== undefined) {
+    const unpacked = value.unpack(client.store.registry)
+    if (unpacked !== undefined) return unpacked?.toJson()
+  }
+
   return ""
 }
 
-export function getConstraintValue(constraint: Constraint) {
+export function getConstraintValue(constraint: Constraint, client: SyncClient) {
   const value = getValue(constraint.value, constraint.valueNew)
 
-  return getSimpleValue(value)
+  return getSimpleValue(value, client)
 }
 
-type Result = string | number | boolean
+type Result = string | number | boolean | JsonValue
 
 interface ResultSetRaw {
   result: Result
@@ -151,10 +158,14 @@ function serializeResultSet(resultSetRaw: ResultSetRaw): ResultSet {
   }
 }
 
-export function getConfigCombinations(config: Feature) {
+export function getConfigCombinations(config: Feature, client: SyncClient) {
   const combinations: ResultSetRaw[] = []
 
-  if (config.tree === undefined || config.type === FeatureType.PROTO) return []
+  if (
+    config.tree === undefined ||
+    (config.type === FeatureType.PROTO && client.store.registry === undefined)
+  )
+    return []
   const constraints = config.tree.constraints ?? []
 
   // if there is only a default it cannot generate combinations against other features
@@ -165,13 +176,14 @@ export function getConfigCombinations(config: Feature) {
   combinations.push({
     result: getSimpleValue(
       getValue(config.tree.default, config.tree.defaultNew),
+      client,
     ),
     constraints: [],
     default: true,
   })
 
   constraints.forEach((constraint) => {
-    const result = getConstraintValue(constraint)
+    const result = getConstraintValue(constraint, client)
     const existingResultSet = combinations.find(
       (combination) => combination.result === result,
     )
@@ -218,6 +230,7 @@ function convertToRecord(
 }
 
 export function getNamespaceCombinations(
+  client: SyncClient,
   configs: Map<string, configData>,
   excludedConfigNames: string[],
   contextSamples?: ClientContext[],
@@ -226,7 +239,7 @@ export function getNamespaceCombinations(
     Array.from(configs.entries())
       .map(([configName, configData]) => ({
         configName,
-        values: getConfigCombinations(configData.config),
+        values: getConfigCombinations(configData.config, client),
       }))
       .filter((config) => {
         return (
@@ -270,6 +283,7 @@ export function getNamespaceCombinations(
     }
   })
   return evaluateAndGroupConfigurations(
+    client,
     remainingConfigs,
     mapped,
     contextSamples,
@@ -288,6 +302,7 @@ function getCombinationKey(combination: Record<string, ResultSet>): string {
 }
 
 export function evaluateAndGroupConfigurations(
+  client: SyncClient,
   configs: Feature[],
   initialResults: Array<Record<string, ResultSet>>,
   contextSamples: ClientContext[] = [],
@@ -306,7 +321,7 @@ export function evaluateAndGroupConfigurations(
     const results: Record<string, Result> = {}
     configs.forEach((config) => {
       const evaluationResult = evaluate(config, "frontend", context)
-      const simpleResult = getSimpleValue(evaluationResult.value)
+      const simpleResult = getSimpleValue(evaluationResult.value, client)
       results[config.key] = simpleResult
     })
 

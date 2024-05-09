@@ -17,8 +17,21 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { DeregisterClientRequest, DeregisterClientResponse, GetDeveloperAccessTokenRequest, GetDeveloperAccessTokenResponse, GetRepositoryContentsRequest, GetRepositoryContentsResponse, GetRepositoryVersionRequest, GetRepositoryVersionResponse, RegisterClientRequest, RegisterClientResponse, SendFlagEvaluationMetricsRequest, SendFlagEvaluationMetricsResponse } from "./distribution_service_pb";
-import { MethodKind } from "@bufbuild/protobuf";
+import {
+  DeregisterClientRequest,
+  DeregisterClientResponse,
+  GetDeveloperAccessTokenRequest,
+  GetDeveloperAccessTokenResponse,
+  GetRepositoryContentsRequest,
+  GetRepositoryContentsResponse,
+  GetRepositoryVersionRequest,
+  GetRepositoryVersionResponse,
+  RegisterClientRequest,
+  RegisterClientResponse,
+  SendFlagEvaluationMetricsRequest,
+  SendFlagEvaluationMetricsResponse,
+} from "./distribution_service_pb"
+import { MethodKind } from "@bufbuild/protobuf"
 
 /**
  * Initial implementation of a config distribution service. Clients should begin by
@@ -98,6 +111,5 @@ export const DistributionService = {
       O: GetDeveloperAccessTokenResponse,
       kind: MethodKind.Unary,
     },
-  }
-} as const;
-
+  },
+} as const

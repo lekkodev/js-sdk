@@ -27,7 +27,7 @@ const eventsBatchSize = 100
 export class Backend implements SyncClient {
   public repository: RepositoryKey
   distClient: PromiseClient<typeof DistributionService>
-  store: Store
+  public store: Store
   sessionKey?: string
   closed: boolean
   timeout?: NodeJS.Timeout
