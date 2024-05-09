@@ -239,7 +239,7 @@ function evaluateStringComparator(
   }
 }
 
-function getString(v: Value | LekkoValue | undefined): string {
+export function getString(v: Value | LekkoValue | undefined): string {
   if (v === undefined) {
     throw new Error("value is undefined")
   }
@@ -272,7 +272,7 @@ function evaluateNumberComparator(
   }
 }
 
-function getNumber(v: Value | LekkoValue | undefined): number {
+export function getNumber(v: Value | LekkoValue | undefined): number {
   if (v === undefined) {
     throw new Error("value is undefined")
   }

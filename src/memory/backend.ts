@@ -17,7 +17,7 @@ import {
 } from "@bufbuild/protobuf"
 import { ClientContext } from "../context/context"
 import { type SyncClient } from "../types/client"
-import { Store, type StoredEvalResult } from "./store"
+import { Store, type configMap, type StoredEvalResult } from "./store"
 import { type ListContentsResponse } from "../gen/lekko/server/v1beta1/sdk_pb"
 import { EventsBatcher, toContextKeysProto } from "./events"
 
@@ -27,7 +27,7 @@ const eventsBatchSize = 100
 export class Backend implements SyncClient {
   public repository: RepositoryKey
   distClient: PromiseClient<typeof DistributionService>
-  store: Store
+  public store: Store
   sessionKey?: string
   closed: boolean
   timeout?: NodeJS.Timeout
@@ -68,7 +68,7 @@ export class Backend implements SyncClient {
   getBool(
     namespace: string,
     key: string,
-    ctx?: ClientContext | { [key: string]: string | number | boolean },
+    ctx?: ClientContext | Record<string, string | number | boolean>,
   ): boolean {
     const wrapper = new BoolValue()
     this.evaluateAndUnpack(namespace, key, wrapper, ctx)
@@ -78,7 +78,7 @@ export class Backend implements SyncClient {
   getInt(
     namespace: string,
     key: string,
-    ctx?: ClientContext | { [key: string]: string | number | boolean },
+    ctx?: ClientContext | Record<string, string | number | boolean>,
   ): bigint {
     const wrapper = new Int64Value()
     this.evaluateAndUnpack(namespace, key, wrapper, ctx)
@@ -88,7 +88,7 @@ export class Backend implements SyncClient {
   getFloat(
     namespace: string,
     key: string,
-    ctx?: ClientContext | { [key: string]: string | number | boolean },
+    ctx?: ClientContext | Record<string, string | number | boolean>,
   ): number {
     const wrapper = new DoubleValue()
     this.evaluateAndUnpack(namespace, key, wrapper, ctx)
@@ -98,7 +98,7 @@ export class Backend implements SyncClient {
   getString(
     namespace: string,
     key: string,
-    ctx?: ClientContext | { [key: string]: string | number | boolean },
+    ctx?: ClientContext | Record<string, string | number | boolean>,
   ): string {
     const wrapper = new StringValue()
     this.evaluateAndUnpack(namespace, key, wrapper, ctx)
@@ -109,7 +109,7 @@ export class Backend implements SyncClient {
   getJSON(
     namespace: string,
     key: string,
-    ctx?: ClientContext | { [key: string]: string | number | boolean },
+    ctx?: ClientContext | Record<string, string | number | boolean>,
   ): any {
     const wrapper = new Value()
     this.evaluateAndUnpack(namespace, key, wrapper, ctx)
@@ -119,7 +119,7 @@ export class Backend implements SyncClient {
   getProto(
     namespace: string,
     key: string,
-    ctx?: ClientContext | { [key: string]: string | number | boolean },
+    ctx?: ClientContext | Record<string, string | number | boolean>,
   ): Any {
     if (!ctx) {
       ctx = new ClientContext()
@@ -135,11 +135,15 @@ export class Backend implements SyncClient {
     return this.store.listContents()
   }
 
+  getConfigs(): configMap {
+    return this.store.configs
+  }
+
   evaluateAndUnpack(
     namespace: string,
     configKey: string,
     wrapper: BoolValue | StringValue | Int64Value | DoubleValue | Value,
-    ctx?: ClientContext | { [key: string]: string | number | boolean },
+    ctx?: ClientContext | Record<string, string | number | boolean>,
   ) {
     if (!ctx) {
       ctx = new ClientContext()

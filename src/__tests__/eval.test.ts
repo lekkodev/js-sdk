@@ -1,20 +1,11 @@
 import {
-  type Any,
-  BoolValue,
-  DoubleValue,
-  Int64Value,
   StringValue,
-  Timestamp,
-  Value,
-} from "@bufbuild/protobuf"
-import { Store, type StoredEvalResult } from "../memory/store"
-import { GetRepositoryContentsResponse } from "../gen/lekko/backend/v1beta1/distribution_service_pb"
-import {
   BinaryWriter,
   WireType,
   protoBase64,
-  BinaryReader,
 } from "@bufbuild/protobuf"
+import { Store } from "../memory/store"
+import { GetRepositoryContentsResponse } from "../gen/lekko/backend/v1beta1/distribution_service_pb"
 
 test("Super Basic Test", () => {
   const store = new Store("", "")

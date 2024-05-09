@@ -12,17 +12,16 @@ import {
   createRegistryFromDescriptors,
   BinaryWriter,
   WireType,
-  protoBase64,
   BinaryReader,
   type IMessageTypeRegistry,
 } from "@bufbuild/protobuf"
 
-interface configData {
+export interface configData {
   configSHA: string
   config: Feature
 }
 
-type configMap = Map<string, Map<string, configData>>
+export type configMap = Map<string, Map<string, configData>>
 
 export class NotFoundError extends Error {
   constructor(resType: "namespace" | "config", name: string) {
@@ -38,7 +37,7 @@ export interface StoredEvalResult {
 }
 
 export class Store {
-  configs: configMap
+  public configs: configMap
   commitSHA: string
   ownerName: string
   repoName: string
@@ -68,11 +67,11 @@ export class Store {
     configKey: string,
     context?: ClientContext,
   ): StoredEvalResult {
-    let fieldNumber = undefined
-    let typeUrl = undefined
+    let fieldNumber
+    let typeUrl
     while (true) {
       const cfg = this.get(namespace, configKey)
-      let evalResult = evaluate(cfg.config, namespace, context)
+      const evalResult = evaluate(cfg.config, namespace, context)
       if (
         evalResult.value.typeUrl ===
         "type.googleapis.com/lekko.protobuf.ConfigCall"
@@ -80,7 +79,7 @@ export class Store {
         const reader = new BinaryReader(evalResult.value.value)
         while (true) {
           try {
-            let [fid, wireType] = reader.tag()
+            const [fid, wireType] = reader.tag()
             switch (fid) {
               case 1:
                 typeUrl = reader.string()
@@ -107,11 +106,14 @@ export class Store {
           while (true) {
             // TODO fucking default fields
             try {
-              let [fid, wireType] = reader.tag()
+              const [fid, wireType] = reader.tag()
               if (fid == fieldNumber) {
-                const bytes = wireType == WireType.LengthDelimited ? reader.bytes() : reader.skip(wireType);
+                const bytes =
+                  wireType == WireType.LengthDelimited
+                    ? reader.bytes()
+                    : reader.skip(wireType)
                 evalResult.value = new Any({
-                  typeUrl: typeUrl,
+                  typeUrl,
                   value: new BinaryWriter()
                     .tag(1, WireType.LengthDelimited)
                     .bytes(bytes)
@@ -129,7 +131,7 @@ export class Store {
         return {
           ...cfg, // Why?... This is really slow and probably shouldn't be re-used... I also break this right now..
           commitSHA: this.getCommitSHA(),
-          evalResult: evalResult,
+          evalResult,
         }
       }
     }

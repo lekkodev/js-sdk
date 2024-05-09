@@ -17,9 +17,21 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { FileDescriptorSet, Message, proto3, Timestamp } from "@bufbuild/protobuf";
-import { Feature as Feature$1 } from "../../feature/v1beta1/feature_pb";
+import type {
+  BinaryReadOptions,
+  FieldList,
+  JsonReadOptions,
+  JsonValue,
+  PartialMessage,
+  PlainMessage,
+} from "@bufbuild/protobuf"
+import {
+  FileDescriptorSet,
+  Message,
+  proto3,
+  Timestamp,
+} from "@bufbuild/protobuf"
+import { Feature as Feature$1 } from "../../feature/v1beta1/feature_pb"
 
 /**
  * @generated from message lekko.backend.v1beta1.RepositoryKey
@@ -28,39 +40,51 @@ export class RepositoryKey extends Message<RepositoryKey> {
   /**
    * @generated from field: string owner_name = 1;
    */
-  ownerName = "";
+  ownerName = ""
 
   /**
    * @generated from field: string repo_name = 2;
    */
-  repoName = "";
+  repoName = ""
 
   constructor(data?: PartialMessage<RepositoryKey>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.backend.v1beta1.RepositoryKey";
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = "lekko.backend.v1beta1.RepositoryKey"
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "owner_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 2, name: "repo_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): RepositoryKey {
-    return new RepositoryKey().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): RepositoryKey {
+    return new RepositoryKey().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): RepositoryKey {
-    return new RepositoryKey().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): RepositoryKey {
+    return new RepositoryKey().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): RepositoryKey {
-    return new RepositoryKey().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): RepositoryKey {
+    return new RepositoryKey().fromJsonString(jsonString, options)
   }
 
-  static equals(a: RepositoryKey | PlainMessage<RepositoryKey> | undefined, b: RepositoryKey | PlainMessage<RepositoryKey> | undefined): boolean {
-    return proto3.util.equals(RepositoryKey, a, b);
+  static equals(
+    a: RepositoryKey | PlainMessage<RepositoryKey> | undefined,
+    b: RepositoryKey | PlainMessage<RepositoryKey> | undefined,
+  ): boolean {
+    return proto3.util.equals(RepositoryKey, a, b)
   }
 }
 
@@ -71,39 +95,62 @@ export class GetRepositoryVersionRequest extends Message<GetRepositoryVersionReq
   /**
    * @generated from field: lekko.backend.v1beta1.RepositoryKey repo_key = 1;
    */
-  repoKey?: RepositoryKey;
+  repoKey?: RepositoryKey
 
   /**
    * @generated from field: string session_key = 2;
    */
-  sessionKey = "";
+  sessionKey = ""
 
   constructor(data?: PartialMessage<GetRepositoryVersionRequest>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.backend.v1beta1.GetRepositoryVersionRequest";
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = "lekko.backend.v1beta1.GetRepositoryVersionRequest"
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "repo_key", kind: "message", T: RepositoryKey },
-    { no: 2, name: "session_key", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+    {
+      no: 2,
+      name: "session_key",
+      kind: "scalar",
+      T: 9 /* ScalarType.STRING */,
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetRepositoryVersionRequest {
-    return new GetRepositoryVersionRequest().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): GetRepositoryVersionRequest {
+    return new GetRepositoryVersionRequest().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetRepositoryVersionRequest {
-    return new GetRepositoryVersionRequest().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): GetRepositoryVersionRequest {
+    return new GetRepositoryVersionRequest().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetRepositoryVersionRequest {
-    return new GetRepositoryVersionRequest().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): GetRepositoryVersionRequest {
+    return new GetRepositoryVersionRequest().fromJsonString(jsonString, options)
   }
 
-  static equals(a: GetRepositoryVersionRequest | PlainMessage<GetRepositoryVersionRequest> | undefined, b: GetRepositoryVersionRequest | PlainMessage<GetRepositoryVersionRequest> | undefined): boolean {
-    return proto3.util.equals(GetRepositoryVersionRequest, a, b);
+  static equals(
+    a:
+      | GetRepositoryVersionRequest
+      | PlainMessage<GetRepositoryVersionRequest>
+      | undefined,
+    b:
+      | GetRepositoryVersionRequest
+      | PlainMessage<GetRepositoryVersionRequest>
+      | undefined,
+  ): boolean {
+    return proto3.util.equals(GetRepositoryVersionRequest, a, b)
   }
 }
 
@@ -114,33 +161,55 @@ export class GetRepositoryVersionResponse extends Message<GetRepositoryVersionRe
   /**
    * @generated from field: string commit_sha = 1;
    */
-  commitSha = "";
+  commitSha = ""
 
   constructor(data?: PartialMessage<GetRepositoryVersionResponse>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.backend.v1beta1.GetRepositoryVersionResponse";
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName =
+    "lekko.backend.v1beta1.GetRepositoryVersionResponse"
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "commit_sha", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetRepositoryVersionResponse {
-    return new GetRepositoryVersionResponse().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): GetRepositoryVersionResponse {
+    return new GetRepositoryVersionResponse().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetRepositoryVersionResponse {
-    return new GetRepositoryVersionResponse().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): GetRepositoryVersionResponse {
+    return new GetRepositoryVersionResponse().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetRepositoryVersionResponse {
-    return new GetRepositoryVersionResponse().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): GetRepositoryVersionResponse {
+    return new GetRepositoryVersionResponse().fromJsonString(
+      jsonString,
+      options,
+    )
   }
 
-  static equals(a: GetRepositoryVersionResponse | PlainMessage<GetRepositoryVersionResponse> | undefined, b: GetRepositoryVersionResponse | PlainMessage<GetRepositoryVersionResponse> | undefined): boolean {
-    return proto3.util.equals(GetRepositoryVersionResponse, a, b);
+  static equals(
+    a:
+      | GetRepositoryVersionResponse
+      | PlainMessage<GetRepositoryVersionResponse>
+      | undefined,
+    b:
+      | GetRepositoryVersionResponse
+      | PlainMessage<GetRepositoryVersionResponse>
+      | undefined,
+  ): boolean {
+    return proto3.util.equals(GetRepositoryVersionResponse, a, b)
   }
 }
 
@@ -151,55 +220,92 @@ export class GetRepositoryContentsRequest extends Message<GetRepositoryContentsR
   /**
    * @generated from field: lekko.backend.v1beta1.RepositoryKey repo_key = 1;
    */
-  repoKey?: RepositoryKey;
+  repoKey?: RepositoryKey
 
   /**
    * optional namespace_name to filter responses by
    *
    * @generated from field: string namespace_name = 2;
    */
-  namespaceName = "";
+  namespaceName = ""
 
   /**
    * optional feature_name to filter responses by
    *
    * @generated from field: string feature_name = 3;
    */
-  featureName = "";
+  featureName = ""
 
   /**
    * @generated from field: string session_key = 4;
    */
-  sessionKey = "";
+  sessionKey = ""
 
   constructor(data?: PartialMessage<GetRepositoryContentsRequest>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.backend.v1beta1.GetRepositoryContentsRequest";
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName =
+    "lekko.backend.v1beta1.GetRepositoryContentsRequest"
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "repo_key", kind: "message", T: RepositoryKey },
-    { no: 2, name: "namespace_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "feature_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: "session_key", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+    {
+      no: 2,
+      name: "namespace_name",
+      kind: "scalar",
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 3,
+      name: "feature_name",
+      kind: "scalar",
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 4,
+      name: "session_key",
+      kind: "scalar",
+      T: 9 /* ScalarType.STRING */,
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetRepositoryContentsRequest {
-    return new GetRepositoryContentsRequest().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): GetRepositoryContentsRequest {
+    return new GetRepositoryContentsRequest().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetRepositoryContentsRequest {
-    return new GetRepositoryContentsRequest().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): GetRepositoryContentsRequest {
+    return new GetRepositoryContentsRequest().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetRepositoryContentsRequest {
-    return new GetRepositoryContentsRequest().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): GetRepositoryContentsRequest {
+    return new GetRepositoryContentsRequest().fromJsonString(
+      jsonString,
+      options,
+    )
   }
 
-  static equals(a: GetRepositoryContentsRequest | PlainMessage<GetRepositoryContentsRequest> | undefined, b: GetRepositoryContentsRequest | PlainMessage<GetRepositoryContentsRequest> | undefined): boolean {
-    return proto3.util.equals(GetRepositoryContentsRequest, a, b);
+  static equals(
+    a:
+      | GetRepositoryContentsRequest
+      | PlainMessage<GetRepositoryContentsRequest>
+      | undefined,
+    b:
+      | GetRepositoryContentsRequest
+      | PlainMessage<GetRepositoryContentsRequest>
+      | undefined,
+  ): boolean {
+    return proto3.util.equals(GetRepositoryContentsRequest, a, b)
   }
 }
 
@@ -210,45 +316,78 @@ export class GetRepositoryContentsResponse extends Message<GetRepositoryContents
   /**
    * @generated from field: string commit_sha = 1;
    */
-  commitSha = "";
+  commitSha = ""
 
   /**
    * @generated from field: repeated lekko.backend.v1beta1.Namespace namespaces = 2;
    */
-  namespaces: Namespace[] = [];
+  namespaces: Namespace[] = []
 
   /**
    * @generated from field: google.protobuf.FileDescriptorSet file_descriptor_set = 3;
    */
-  fileDescriptorSet?: FileDescriptorSet;
+  fileDescriptorSet?: FileDescriptorSet
 
   constructor(data?: PartialMessage<GetRepositoryContentsResponse>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.backend.v1beta1.GetRepositoryContentsResponse";
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName =
+    "lekko.backend.v1beta1.GetRepositoryContentsResponse"
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "commit_sha", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "namespaces", kind: "message", T: Namespace, repeated: true },
-    { no: 3, name: "file_descriptor_set", kind: "message", T: FileDescriptorSet },
-  ]);
+    {
+      no: 2,
+      name: "namespaces",
+      kind: "message",
+      T: Namespace,
+      repeated: true,
+    },
+    {
+      no: 3,
+      name: "file_descriptor_set",
+      kind: "message",
+      T: FileDescriptorSet,
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetRepositoryContentsResponse {
-    return new GetRepositoryContentsResponse().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): GetRepositoryContentsResponse {
+    return new GetRepositoryContentsResponse().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetRepositoryContentsResponse {
-    return new GetRepositoryContentsResponse().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): GetRepositoryContentsResponse {
+    return new GetRepositoryContentsResponse().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetRepositoryContentsResponse {
-    return new GetRepositoryContentsResponse().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): GetRepositoryContentsResponse {
+    return new GetRepositoryContentsResponse().fromJsonString(
+      jsonString,
+      options,
+    )
   }
 
-  static equals(a: GetRepositoryContentsResponse | PlainMessage<GetRepositoryContentsResponse> | undefined, b: GetRepositoryContentsResponse | PlainMessage<GetRepositoryContentsResponse> | undefined): boolean {
-    return proto3.util.equals(GetRepositoryContentsResponse, a, b);
+  static equals(
+    a:
+      | GetRepositoryContentsResponse
+      | PlainMessage<GetRepositoryContentsResponse>
+      | undefined,
+    b:
+      | GetRepositoryContentsResponse
+      | PlainMessage<GetRepositoryContentsResponse>
+      | undefined,
+  ): boolean {
+    return proto3.util.equals(GetRepositoryContentsResponse, a, b)
   }
 }
 
@@ -259,39 +398,51 @@ export class Namespace extends Message<Namespace> {
   /**
    * @generated from field: string name = 1;
    */
-  name = "";
+  name = ""
 
   /**
    * @generated from field: repeated lekko.backend.v1beta1.Feature features = 2;
    */
-  features: Feature[] = [];
+  features: Feature[] = []
 
   constructor(data?: PartialMessage<Namespace>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.backend.v1beta1.Namespace";
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = "lekko.backend.v1beta1.Namespace"
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 2, name: "features", kind: "message", T: Feature, repeated: true },
-  ]);
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Namespace {
-    return new Namespace().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): Namespace {
+    return new Namespace().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Namespace {
-    return new Namespace().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): Namespace {
+    return new Namespace().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Namespace {
-    return new Namespace().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): Namespace {
+    return new Namespace().fromJsonString(jsonString, options)
   }
 
-  static equals(a: Namespace | PlainMessage<Namespace> | undefined, b: Namespace | PlainMessage<Namespace> | undefined): boolean {
-    return proto3.util.equals(Namespace, a, b);
+  static equals(
+    a: Namespace | PlainMessage<Namespace> | undefined,
+    b: Namespace | PlainMessage<Namespace> | undefined,
+  ): boolean {
+    return proto3.util.equals(Namespace, a, b)
   }
 }
 
@@ -302,47 +453,59 @@ export class Feature extends Message<Feature> {
   /**
    * @generated from field: string name = 1;
    */
-  name = "";
+  name = ""
 
   /**
    * The sha of the protobuf binary according to git.
    *
    * @generated from field: string sha = 2;
    */
-  sha = "";
+  sha = ""
 
   /**
    * @generated from field: lekko.feature.v1beta1.Feature feature = 3;
    */
-  feature?: Feature$1;
+  feature?: Feature$1
 
   constructor(data?: PartialMessage<Feature>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.backend.v1beta1.Feature";
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = "lekko.backend.v1beta1.Feature"
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 2, name: "sha", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 3, name: "feature", kind: "message", T: Feature$1 },
-  ]);
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Feature {
-    return new Feature().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): Feature {
+    return new Feature().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Feature {
-    return new Feature().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): Feature {
+    return new Feature().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Feature {
-    return new Feature().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): Feature {
+    return new Feature().fromJsonString(jsonString, options)
   }
 
-  static equals(a: Feature | PlainMessage<Feature> | undefined, b: Feature | PlainMessage<Feature> | undefined): boolean {
-    return proto3.util.equals(Feature, a, b);
+  static equals(
+    a: Feature | PlainMessage<Feature> | undefined,
+    b: Feature | PlainMessage<Feature> | undefined,
+  ): boolean {
+    return proto3.util.equals(Feature, a, b)
   }
 }
 
@@ -353,39 +516,51 @@ export class ContextKey extends Message<ContextKey> {
   /**
    * @generated from field: string key = 1;
    */
-  key = "";
+  key = ""
 
   /**
    * @generated from field: string type = 2;
    */
-  type = "";
+  type = ""
 
   constructor(data?: PartialMessage<ContextKey>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.backend.v1beta1.ContextKey";
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = "lekko.backend.v1beta1.ContextKey"
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "key", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 2, name: "type", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ContextKey {
-    return new ContextKey().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): ContextKey {
+    return new ContextKey().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ContextKey {
-    return new ContextKey().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): ContextKey {
+    return new ContextKey().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ContextKey {
-    return new ContextKey().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): ContextKey {
+    return new ContextKey().fromJsonString(jsonString, options)
   }
 
-  static equals(a: ContextKey | PlainMessage<ContextKey> | undefined, b: ContextKey | PlainMessage<ContextKey> | undefined): boolean {
-    return proto3.util.equals(ContextKey, a, b);
+  static equals(
+    a: ContextKey | PlainMessage<ContextKey> | undefined,
+    b: ContextKey | PlainMessage<ContextKey> | undefined,
+  ): boolean {
+    return proto3.util.equals(ContextKey, a, b)
   }
 }
 
@@ -396,79 +571,118 @@ export class FlagEvaluationEvent extends Message<FlagEvaluationEvent> {
   /**
    * @generated from field: lekko.backend.v1beta1.RepositoryKey repo_key = 1;
    */
-  repoKey?: RepositoryKey;
+  repoKey?: RepositoryKey
 
   /**
    * @generated from field: string commit_sha = 2;
    */
-  commitSha = "";
+  commitSha = ""
 
   /**
    * @generated from field: string feature_sha = 3;
    */
-  featureSha = "";
+  featureSha = ""
 
   /**
    * @generated from field: string namespace_name = 4;
    */
-  namespaceName = "";
+  namespaceName = ""
 
   /**
    * @generated from field: string feature_name = 5;
    */
-  featureName = "";
+  featureName = ""
 
   /**
    * A list of context keys (not values) that were provided at runtime.
    *
    * @generated from field: repeated lekko.backend.v1beta1.ContextKey context_keys = 6;
    */
-  contextKeys: ContextKey[] = [];
+  contextKeys: ContextKey[] = []
 
   /**
    * The node in the tree that contained the final return value of the feature.
    *
    * @generated from field: repeated int32 result_path = 7;
    */
-  resultPath: number[] = [];
+  resultPath: number[] = []
 
   /**
    * @generated from field: google.protobuf.Timestamp client_event_time = 8;
    */
-  clientEventTime?: Timestamp;
+  clientEventTime?: Timestamp
 
   constructor(data?: PartialMessage<FlagEvaluationEvent>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.backend.v1beta1.FlagEvaluationEvent";
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = "lekko.backend.v1beta1.FlagEvaluationEvent"
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "repo_key", kind: "message", T: RepositoryKey },
     { no: 2, name: "commit_sha", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "feature_sha", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: "namespace_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 5, name: "feature_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 6, name: "context_keys", kind: "message", T: ContextKey, repeated: true },
-    { no: 7, name: "result_path", kind: "scalar", T: 5 /* ScalarType.INT32 */, repeated: true },
+    {
+      no: 3,
+      name: "feature_sha",
+      kind: "scalar",
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 4,
+      name: "namespace_name",
+      kind: "scalar",
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 5,
+      name: "feature_name",
+      kind: "scalar",
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 6,
+      name: "context_keys",
+      kind: "message",
+      T: ContextKey,
+      repeated: true,
+    },
+    {
+      no: 7,
+      name: "result_path",
+      kind: "scalar",
+      T: 5 /* ScalarType.INT32 */,
+      repeated: true,
+    },
     { no: 8, name: "client_event_time", kind: "message", T: Timestamp },
-  ]);
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): FlagEvaluationEvent {
-    return new FlagEvaluationEvent().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): FlagEvaluationEvent {
+    return new FlagEvaluationEvent().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): FlagEvaluationEvent {
-    return new FlagEvaluationEvent().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): FlagEvaluationEvent {
+    return new FlagEvaluationEvent().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): FlagEvaluationEvent {
-    return new FlagEvaluationEvent().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): FlagEvaluationEvent {
+    return new FlagEvaluationEvent().fromJsonString(jsonString, options)
   }
 
-  static equals(a: FlagEvaluationEvent | PlainMessage<FlagEvaluationEvent> | undefined, b: FlagEvaluationEvent | PlainMessage<FlagEvaluationEvent> | undefined): boolean {
-    return proto3.util.equals(FlagEvaluationEvent, a, b);
+  static equals(
+    a: FlagEvaluationEvent | PlainMessage<FlagEvaluationEvent> | undefined,
+    b: FlagEvaluationEvent | PlainMessage<FlagEvaluationEvent> | undefined,
+  ): boolean {
+    return proto3.util.equals(FlagEvaluationEvent, a, b)
   }
 }
 
@@ -479,39 +693,72 @@ export class SendFlagEvaluationMetricsRequest extends Message<SendFlagEvaluation
   /**
    * @generated from field: repeated lekko.backend.v1beta1.FlagEvaluationEvent events = 1;
    */
-  events: FlagEvaluationEvent[] = [];
+  events: FlagEvaluationEvent[] = []
 
   /**
    * @generated from field: string session_key = 2;
    */
-  sessionKey = "";
+  sessionKey = ""
 
   constructor(data?: PartialMessage<SendFlagEvaluationMetricsRequest>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.backend.v1beta1.SendFlagEvaluationMetricsRequest";
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName =
+    "lekko.backend.v1beta1.SendFlagEvaluationMetricsRequest"
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "events", kind: "message", T: FlagEvaluationEvent, repeated: true },
-    { no: 2, name: "session_key", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+    {
+      no: 1,
+      name: "events",
+      kind: "message",
+      T: FlagEvaluationEvent,
+      repeated: true,
+    },
+    {
+      no: 2,
+      name: "session_key",
+      kind: "scalar",
+      T: 9 /* ScalarType.STRING */,
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SendFlagEvaluationMetricsRequest {
-    return new SendFlagEvaluationMetricsRequest().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): SendFlagEvaluationMetricsRequest {
+    return new SendFlagEvaluationMetricsRequest().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SendFlagEvaluationMetricsRequest {
-    return new SendFlagEvaluationMetricsRequest().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): SendFlagEvaluationMetricsRequest {
+    return new SendFlagEvaluationMetricsRequest().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SendFlagEvaluationMetricsRequest {
-    return new SendFlagEvaluationMetricsRequest().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): SendFlagEvaluationMetricsRequest {
+    return new SendFlagEvaluationMetricsRequest().fromJsonString(
+      jsonString,
+      options,
+    )
   }
 
-  static equals(a: SendFlagEvaluationMetricsRequest | PlainMessage<SendFlagEvaluationMetricsRequest> | undefined, b: SendFlagEvaluationMetricsRequest | PlainMessage<SendFlagEvaluationMetricsRequest> | undefined): boolean {
-    return proto3.util.equals(SendFlagEvaluationMetricsRequest, a, b);
+  static equals(
+    a:
+      | SendFlagEvaluationMetricsRequest
+      | PlainMessage<SendFlagEvaluationMetricsRequest>
+      | undefined,
+    b:
+      | SendFlagEvaluationMetricsRequest
+      | PlainMessage<SendFlagEvaluationMetricsRequest>
+      | undefined,
+  ): boolean {
+    return proto3.util.equals(SendFlagEvaluationMetricsRequest, a, b)
   }
 }
 
@@ -520,29 +767,50 @@ export class SendFlagEvaluationMetricsRequest extends Message<SendFlagEvaluation
  */
 export class SendFlagEvaluationMetricsResponse extends Message<SendFlagEvaluationMetricsResponse> {
   constructor(data?: PartialMessage<SendFlagEvaluationMetricsResponse>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.backend.v1beta1.SendFlagEvaluationMetricsResponse";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-  ]);
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName =
+    "lekko.backend.v1beta1.SendFlagEvaluationMetricsResponse"
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SendFlagEvaluationMetricsResponse {
-    return new SendFlagEvaluationMetricsResponse().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): SendFlagEvaluationMetricsResponse {
+    return new SendFlagEvaluationMetricsResponse().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SendFlagEvaluationMetricsResponse {
-    return new SendFlagEvaluationMetricsResponse().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): SendFlagEvaluationMetricsResponse {
+    return new SendFlagEvaluationMetricsResponse().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SendFlagEvaluationMetricsResponse {
-    return new SendFlagEvaluationMetricsResponse().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): SendFlagEvaluationMetricsResponse {
+    return new SendFlagEvaluationMetricsResponse().fromJsonString(
+      jsonString,
+      options,
+    )
   }
 
-  static equals(a: SendFlagEvaluationMetricsResponse | PlainMessage<SendFlagEvaluationMetricsResponse> | undefined, b: SendFlagEvaluationMetricsResponse | PlainMessage<SendFlagEvaluationMetricsResponse> | undefined): boolean {
-    return proto3.util.equals(SendFlagEvaluationMetricsResponse, a, b);
+  static equals(
+    a:
+      | SendFlagEvaluationMetricsResponse
+      | PlainMessage<SendFlagEvaluationMetricsResponse>
+      | undefined,
+    b:
+      | SendFlagEvaluationMetricsResponse
+      | PlainMessage<SendFlagEvaluationMetricsResponse>
+      | undefined,
+  ): boolean {
+    return proto3.util.equals(SendFlagEvaluationMetricsResponse, a, b)
   }
 }
 
@@ -553,7 +821,7 @@ export class RegisterClientRequest extends Message<RegisterClientRequest> {
   /**
    * @generated from field: lekko.backend.v1beta1.RepositoryKey repo_key = 1;
    */
-  repoKey?: RepositoryKey;
+  repoKey?: RepositoryKey
 
   /**
    * The namespaces to register within the repo. If empty,
@@ -561,7 +829,7 @@ export class RegisterClientRequest extends Message<RegisterClientRequest> {
    *
    * @generated from field: repeated string namespace_list = 2;
    */
-  namespaceList: string[] = [];
+  namespaceList: string[] = []
 
   /**
    * If the client was initialized from a git bootstrap,
@@ -570,7 +838,7 @@ export class RegisterClientRequest extends Message<RegisterClientRequest> {
    *
    * @generated from field: string initial_bootstrap_sha = 3;
    */
-  initialBootstrapSha = "";
+  initialBootstrapSha = ""
 
   /**
    * If the client is a lekko sidecar, provide the semver version,
@@ -578,36 +846,64 @@ export class RegisterClientRequest extends Message<RegisterClientRequest> {
    *
    * @generated from field: string sidecar_version = 4;
    */
-  sidecarVersion = "";
+  sidecarVersion = ""
 
   constructor(data?: PartialMessage<RegisterClientRequest>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.backend.v1beta1.RegisterClientRequest";
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = "lekko.backend.v1beta1.RegisterClientRequest"
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "repo_key", kind: "message", T: RepositoryKey },
-    { no: 2, name: "namespace_list", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
-    { no: 3, name: "initial_bootstrap_sha", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: "sidecar_version", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+    {
+      no: 2,
+      name: "namespace_list",
+      kind: "scalar",
+      T: 9 /* ScalarType.STRING */,
+      repeated: true,
+    },
+    {
+      no: 3,
+      name: "initial_bootstrap_sha",
+      kind: "scalar",
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 4,
+      name: "sidecar_version",
+      kind: "scalar",
+      T: 9 /* ScalarType.STRING */,
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): RegisterClientRequest {
-    return new RegisterClientRequest().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): RegisterClientRequest {
+    return new RegisterClientRequest().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): RegisterClientRequest {
-    return new RegisterClientRequest().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): RegisterClientRequest {
+    return new RegisterClientRequest().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): RegisterClientRequest {
-    return new RegisterClientRequest().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): RegisterClientRequest {
+    return new RegisterClientRequest().fromJsonString(jsonString, options)
   }
 
-  static equals(a: RegisterClientRequest | PlainMessage<RegisterClientRequest> | undefined, b: RegisterClientRequest | PlainMessage<RegisterClientRequest> | undefined): boolean {
-    return proto3.util.equals(RegisterClientRequest, a, b);
+  static equals(
+    a: RegisterClientRequest | PlainMessage<RegisterClientRequest> | undefined,
+    b: RegisterClientRequest | PlainMessage<RegisterClientRequest> | undefined,
+  ): boolean {
+    return proto3.util.equals(RegisterClientRequest, a, b)
   }
 }
 
@@ -620,33 +916,56 @@ export class RegisterClientResponse extends Message<RegisterClientResponse> {
    *
    * @generated from field: string session_key = 4;
    */
-  sessionKey = "";
+  sessionKey = ""
 
   constructor(data?: PartialMessage<RegisterClientResponse>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.backend.v1beta1.RegisterClientResponse";
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = "lekko.backend.v1beta1.RegisterClientResponse"
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 4, name: "session_key", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+    {
+      no: 4,
+      name: "session_key",
+      kind: "scalar",
+      T: 9 /* ScalarType.STRING */,
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): RegisterClientResponse {
-    return new RegisterClientResponse().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): RegisterClientResponse {
+    return new RegisterClientResponse().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): RegisterClientResponse {
-    return new RegisterClientResponse().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): RegisterClientResponse {
+    return new RegisterClientResponse().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): RegisterClientResponse {
-    return new RegisterClientResponse().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): RegisterClientResponse {
+    return new RegisterClientResponse().fromJsonString(jsonString, options)
   }
 
-  static equals(a: RegisterClientResponse | PlainMessage<RegisterClientResponse> | undefined, b: RegisterClientResponse | PlainMessage<RegisterClientResponse> | undefined): boolean {
-    return proto3.util.equals(RegisterClientResponse, a, b);
+  static equals(
+    a:
+      | RegisterClientResponse
+      | PlainMessage<RegisterClientResponse>
+      | undefined,
+    b:
+      | RegisterClientResponse
+      | PlainMessage<RegisterClientResponse>
+      | undefined,
+  ): boolean {
+    return proto3.util.equals(RegisterClientResponse, a, b)
   }
 }
 
@@ -657,33 +976,56 @@ export class DeregisterClientRequest extends Message<DeregisterClientRequest> {
   /**
    * @generated from field: string session_key = 1;
    */
-  sessionKey = "";
+  sessionKey = ""
 
   constructor(data?: PartialMessage<DeregisterClientRequest>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.backend.v1beta1.DeregisterClientRequest";
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = "lekko.backend.v1beta1.DeregisterClientRequest"
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "session_key", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+    {
+      no: 1,
+      name: "session_key",
+      kind: "scalar",
+      T: 9 /* ScalarType.STRING */,
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DeregisterClientRequest {
-    return new DeregisterClientRequest().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): DeregisterClientRequest {
+    return new DeregisterClientRequest().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DeregisterClientRequest {
-    return new DeregisterClientRequest().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): DeregisterClientRequest {
+    return new DeregisterClientRequest().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DeregisterClientRequest {
-    return new DeregisterClientRequest().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): DeregisterClientRequest {
+    return new DeregisterClientRequest().fromJsonString(jsonString, options)
   }
 
-  static equals(a: DeregisterClientRequest | PlainMessage<DeregisterClientRequest> | undefined, b: DeregisterClientRequest | PlainMessage<DeregisterClientRequest> | undefined): boolean {
-    return proto3.util.equals(DeregisterClientRequest, a, b);
+  static equals(
+    a:
+      | DeregisterClientRequest
+      | PlainMessage<DeregisterClientRequest>
+      | undefined,
+    b:
+      | DeregisterClientRequest
+      | PlainMessage<DeregisterClientRequest>
+      | undefined,
+  ): boolean {
+    return proto3.util.equals(DeregisterClientRequest, a, b)
   }
 }
 
@@ -692,29 +1034,46 @@ export class DeregisterClientRequest extends Message<DeregisterClientRequest> {
  */
 export class DeregisterClientResponse extends Message<DeregisterClientResponse> {
   constructor(data?: PartialMessage<DeregisterClientResponse>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.backend.v1beta1.DeregisterClientResponse";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-  ]);
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = "lekko.backend.v1beta1.DeregisterClientResponse"
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DeregisterClientResponse {
-    return new DeregisterClientResponse().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): DeregisterClientResponse {
+    return new DeregisterClientResponse().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DeregisterClientResponse {
-    return new DeregisterClientResponse().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): DeregisterClientResponse {
+    return new DeregisterClientResponse().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DeregisterClientResponse {
-    return new DeregisterClientResponse().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): DeregisterClientResponse {
+    return new DeregisterClientResponse().fromJsonString(jsonString, options)
   }
 
-  static equals(a: DeregisterClientResponse | PlainMessage<DeregisterClientResponse> | undefined, b: DeregisterClientResponse | PlainMessage<DeregisterClientResponse> | undefined): boolean {
-    return proto3.util.equals(DeregisterClientResponse, a, b);
+  static equals(
+    a:
+      | DeregisterClientResponse
+      | PlainMessage<DeregisterClientResponse>
+      | undefined,
+    b:
+      | DeregisterClientResponse
+      | PlainMessage<DeregisterClientResponse>
+      | undefined,
+  ): boolean {
+    return proto3.util.equals(DeregisterClientResponse, a, b)
   }
 }
 
@@ -723,29 +1082,50 @@ export class DeregisterClientResponse extends Message<DeregisterClientResponse> 
  */
 export class GetDeveloperAccessTokenRequest extends Message<GetDeveloperAccessTokenRequest> {
   constructor(data?: PartialMessage<GetDeveloperAccessTokenRequest>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.backend.v1beta1.GetDeveloperAccessTokenRequest";
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-  ]);
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName =
+    "lekko.backend.v1beta1.GetDeveloperAccessTokenRequest"
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetDeveloperAccessTokenRequest {
-    return new GetDeveloperAccessTokenRequest().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): GetDeveloperAccessTokenRequest {
+    return new GetDeveloperAccessTokenRequest().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetDeveloperAccessTokenRequest {
-    return new GetDeveloperAccessTokenRequest().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): GetDeveloperAccessTokenRequest {
+    return new GetDeveloperAccessTokenRequest().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetDeveloperAccessTokenRequest {
-    return new GetDeveloperAccessTokenRequest().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): GetDeveloperAccessTokenRequest {
+    return new GetDeveloperAccessTokenRequest().fromJsonString(
+      jsonString,
+      options,
+    )
   }
 
-  static equals(a: GetDeveloperAccessTokenRequest | PlainMessage<GetDeveloperAccessTokenRequest> | undefined, b: GetDeveloperAccessTokenRequest | PlainMessage<GetDeveloperAccessTokenRequest> | undefined): boolean {
-    return proto3.util.equals(GetDeveloperAccessTokenRequest, a, b);
+  static equals(
+    a:
+      | GetDeveloperAccessTokenRequest
+      | PlainMessage<GetDeveloperAccessTokenRequest>
+      | undefined,
+    b:
+      | GetDeveloperAccessTokenRequest
+      | PlainMessage<GetDeveloperAccessTokenRequest>
+      | undefined,
+  ): boolean {
+    return proto3.util.equals(GetDeveloperAccessTokenRequest, a, b)
   }
 }
 
@@ -758,33 +1138,54 @@ export class GetDeveloperAccessTokenResponse extends Message<GetDeveloperAccessT
    *
    * @generated from field: string token = 1;
    */
-  token = "";
+  token = ""
 
   constructor(data?: PartialMessage<GetDeveloperAccessTokenResponse>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "lekko.backend.v1beta1.GetDeveloperAccessTokenResponse";
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName =
+    "lekko.backend.v1beta1.GetDeveloperAccessTokenResponse"
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "token", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetDeveloperAccessTokenResponse {
-    return new GetDeveloperAccessTokenResponse().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>,
+  ): GetDeveloperAccessTokenResponse {
+    return new GetDeveloperAccessTokenResponse().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetDeveloperAccessTokenResponse {
-    return new GetDeveloperAccessTokenResponse().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>,
+  ): GetDeveloperAccessTokenResponse {
+    return new GetDeveloperAccessTokenResponse().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetDeveloperAccessTokenResponse {
-    return new GetDeveloperAccessTokenResponse().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>,
+  ): GetDeveloperAccessTokenResponse {
+    return new GetDeveloperAccessTokenResponse().fromJsonString(
+      jsonString,
+      options,
+    )
   }
 
-  static equals(a: GetDeveloperAccessTokenResponse | PlainMessage<GetDeveloperAccessTokenResponse> | undefined, b: GetDeveloperAccessTokenResponse | PlainMessage<GetDeveloperAccessTokenResponse> | undefined): boolean {
-    return proto3.util.equals(GetDeveloperAccessTokenResponse, a, b);
+  static equals(
+    a:
+      | GetDeveloperAccessTokenResponse
+      | PlainMessage<GetDeveloperAccessTokenResponse>
+      | undefined,
+    b:
+      | GetDeveloperAccessTokenResponse
+      | PlainMessage<GetDeveloperAccessTokenResponse>
+      | undefined,
+  ): boolean {
+    return proto3.util.equals(GetDeveloperAccessTokenResponse, a, b)
   }
 }
-

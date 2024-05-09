@@ -10,6 +10,11 @@ import { Backend } from "./memory/backend"
 import { version } from "./version"
 import { GetRepositoryContentsResponse } from "./gen/lekko/backend/v1beta1/distribution_service_pb"
 import { toUint8Array } from "js-base64"
+import { type configMap } from "./memory/store"
+import {
+  type ConfigCombination,
+  getNamespaceCombinations,
+} from "./evaluation/combinations"
 
 interface APIOptions {
   apiKey: string
@@ -116,4 +121,7 @@ export {
   RepositoryKey,
   initCachedAPIClient,
   initAPIClientFromContents,
+  type configMap,
+  getNamespaceCombinations,
+  type ConfigCombination,
 }
