@@ -127,6 +127,12 @@ export class Backend implements SyncClient {
       ctx = ClientContext.fromJSON(ctx)
     }
     const result = this.store.evaluateType(namespace, key, ctx)
+    if (IsDebugMode()) {
+      console.log(
+        `Evaluated ${namespace}/${key} using the following context: ${JSON.stringify(ctx)} to get a protobuf value at path: ${result.evalResult.path}`,
+      )
+    }
+
     this.track(namespace, key, result, ctx)
     return result.evalResult.value
   }
@@ -154,6 +160,12 @@ export class Backend implements SyncClient {
     if (result.evalResult.value.unpackTo(wrapper) === undefined) {
       throw new Error("type mismatch")
     }
+    if (IsDebugMode()) {
+      console.log(
+        `Evaluated ${namespace}/${configKey} using the following context: ${JSON.stringify(ctx)} to get: ${wrapper.toJsonString()}`,
+      )
+    }
+
     this.track(namespace, configKey, result, ctx)
   }
 
@@ -224,4 +236,11 @@ export class Backend implements SyncClient {
       sessionKey: this.sessionKey,
     })
   }
+}
+
+function IsDebugMode(): boolean {
+  return typeof window === "undefined"
+    ? process.env.LEKKO_DEBUG !== undefined
+    // @ts-ignore
+    : window.LEKKO_DEBUG !== undefined
 }
