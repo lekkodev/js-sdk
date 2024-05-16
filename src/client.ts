@@ -35,7 +35,7 @@ export class TransportClient implements Client {
     this.client = createPromiseClient(ConfigurationService, transport)
   }
 
-  async close(): Promise<void> {}
+  async close(): Promise<void> { }
 
   async getBool(
     namespace: string,
@@ -135,6 +135,7 @@ export class TransportClient implements Client {
     key: string,
     ctx: ClientContext = new ClientContext(),
   ): Promise<string> {
+    console.log("logging from inside library")
     const req = GetStringValueRequest.fromJson({
       namespace,
       key,
