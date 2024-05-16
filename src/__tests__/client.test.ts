@@ -307,7 +307,7 @@ test("get proto config", async () => {
 })
 
 test("Test JFGI", () => {
-  const file_descriptor_set = FileDescriptorSet.fromJson({
+  const fds = FileDescriptorSet.fromJson({
     file: [
       {
         name: "default/config/v1beta1/example.proto",
@@ -512,7 +512,7 @@ test("Test JFGI", () => {
       },
     ],
   })
-  repoContentsResponse.fileDescriptorSet = file_descriptor_set
+  repoContentsResponse.fileDescriptorSet = fds
   const store = new Store("", "")
   store.load(repoContentsResponse)
   const transport = new ClientTransportBuilder({
