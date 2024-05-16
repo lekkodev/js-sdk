@@ -105,11 +105,11 @@ export class Backend implements SyncClient {
     return wrapper.value
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getJSON(
     namespace: string,
     key: string,
     ctx?: ClientContext | Record<string, string | number | boolean>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): any {
     const wrapper = new Value()
     this.evaluateAndUnpack(namespace, key, wrapper, ctx)
@@ -121,7 +121,7 @@ export class Backend implements SyncClient {
     key: string,
     ctx?: ClientContext | Record<string, string | number | boolean>,
   ): Any {
-    if (!ctx) {
+    if (ctx === undefined) {
       ctx = new ClientContext()
     } else if (!(ctx instanceof ClientContext)) {
       ctx = ClientContext.fromJSON(ctx)
@@ -129,7 +129,7 @@ export class Backend implements SyncClient {
     const result = this.store.evaluateType(namespace, key, ctx)
     if (IsDebugMode()) {
       console.log(
-        `Evaluated ${namespace}/${key} using the following context: ${JSON.stringify(ctx)} to get a protobuf value at path: ${result.evalResult.path}`,
+        `Evaluated ${namespace}/${key} using the following context: ${JSON.stringify(ctx)} to get a protobuf value at path: ${result.evalResult.path.toString()}`,
       )
     }
 
@@ -151,7 +151,7 @@ export class Backend implements SyncClient {
     wrapper: BoolValue | StringValue | Int64Value | DoubleValue | Value,
     ctx?: ClientContext | Record<string, string | number | boolean>,
   ) {
-    if (!ctx) {
+    if (ctx === undefined) {
       ctx = new ClientContext()
     } else if (!(ctx instanceof ClientContext)) {
       ctx = ClientContext.fromJSON(ctx)
@@ -240,7 +240,6 @@ export class Backend implements SyncClient {
 
 function IsDebugMode(): boolean {
   return typeof window === "undefined"
-    ? process.env.LEKKO_DEBUG !== undefined
-    // @ts-ignore
-    : window.LEKKO_DEBUG !== undefined
+    ? process.env.LEKKO_DEBUG === "1"
+    : "LEKKO_DEBUG" in window && window.LEKKO_DEBUG === 1
 }

@@ -101,15 +101,15 @@ export class Store {
           }
         }
       } else {
-        if (fieldNumber) {
+        if (fieldNumber !== undefined) {
           const reader = new BinaryReader(evalResult.value.value)
           while (true) {
             // TODO fucking default fields
             try {
               const [fid, wireType] = reader.tag()
-              if (fid == fieldNumber) {
+              if (fid === fieldNumber) {
                 const bytes =
-                  wireType == WireType.LengthDelimited
+                  wireType === WireType.LengthDelimited
                     ? reader.bytes()
                     : reader.skip(wireType)
                 evalResult.value = new Any({
@@ -160,7 +160,7 @@ export class Store {
     })
     this.configs = newConfigs
     this.commitSHA = contents.commitSha
-    if (contents.fileDescriptorSet) {
+    if (contents.fileDescriptorSet !== undefined) {
       this.registry = createRegistryFromDescriptors(contents.fileDescriptorSet)
     }
     return true
