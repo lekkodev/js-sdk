@@ -1,6 +1,6 @@
 {
   "name": "@lekko/js-sdk",
-  "version": "0.1.5-beta-11",
+  "version": "0.1.5-beta-12",
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
