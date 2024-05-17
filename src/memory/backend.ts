@@ -65,41 +65,25 @@ export class Backend implements SyncClient {
     return innerResult
   }
 
-  getBool(
-    namespace: string,
-    key: string,
-    ctx?: ClientContext | Record<string, string | number | boolean>,
-  ): boolean {
+  getBool(namespace: string, key: string, ctx?: ClientContext): boolean {
     const wrapper = new BoolValue()
     this.evaluateAndUnpack(namespace, key, wrapper, ctx)
     return wrapper.value
   }
 
-  getInt(
-    namespace: string,
-    key: string,
-    ctx?: ClientContext | Record<string, string | number | boolean>,
-  ): bigint {
+  getInt(namespace: string, key: string, ctx?: ClientContext): bigint {
     const wrapper = new Int64Value()
     this.evaluateAndUnpack(namespace, key, wrapper, ctx)
     return wrapper.value
   }
 
-  getFloat(
-    namespace: string,
-    key: string,
-    ctx?: ClientContext | Record<string, string | number | boolean>,
-  ): number {
+  getFloat(namespace: string, key: string, ctx?: ClientContext): number {
     const wrapper = new DoubleValue()
     this.evaluateAndUnpack(namespace, key, wrapper, ctx)
     return wrapper.value
   }
 
-  getString(
-    namespace: string,
-    key: string,
-    ctx?: ClientContext | Record<string, string | number | boolean>,
-  ): string {
+  getString(namespace: string, key: string, ctx?: ClientContext): string {
     const wrapper = new StringValue()
     this.evaluateAndUnpack(namespace, key, wrapper, ctx)
     return wrapper.value
@@ -108,7 +92,7 @@ export class Backend implements SyncClient {
   getJSON(
     namespace: string,
     key: string,
-    ctx?: ClientContext | Record<string, string | number | boolean>,
+    ctx?: ClientContext,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): any {
     const wrapper = new Value()
@@ -116,20 +100,14 @@ export class Backend implements SyncClient {
     return JSON.parse(wrapper.toJsonString())
   }
 
-  getProto(
-    namespace: string,
-    key: string,
-    ctx?: ClientContext | Record<string, string | number | boolean>,
-  ): Any {
+  getProto(namespace: string, key: string, ctx?: ClientContext): Any {
     if (ctx === undefined) {
       ctx = new ClientContext()
-    } else if (!(ctx instanceof ClientContext)) {
-      ctx = ClientContext.fromJSON(ctx)
     }
     const result = this.store.evaluateType(namespace, key, ctx)
     if (IsDebugMode()) {
       console.log(
-        `Evaluated ${namespace}/${key} using the following context: ${JSON.stringify(ctx)} to get a protobuf value at path: ${result.evalResult.path.toString()}`,
+        `Evaluated ${namespace}/${key} using the following context: ${ctx.toString()} to get a protobuf value at path: ${result.evalResult.path.toString()}`,
       )
     }
 
@@ -149,12 +127,10 @@ export class Backend implements SyncClient {
     namespace: string,
     configKey: string,
     wrapper: BoolValue | StringValue | Int64Value | DoubleValue | Value,
-    ctx?: ClientContext | Record<string, string | number | boolean>,
+    ctx?: ClientContext,
   ) {
     if (ctx === undefined) {
       ctx = new ClientContext()
-    } else if (!(ctx instanceof ClientContext)) {
-      ctx = ClientContext.fromJSON(ctx)
     }
     const result = this.store.evaluateType(namespace, configKey, ctx)
     if (result.evalResult.value.unpackTo(wrapper) === undefined) {
@@ -162,7 +138,7 @@ export class Backend implements SyncClient {
     }
     if (IsDebugMode()) {
       console.log(
-        `Evaluated ${namespace}/${configKey} using the following context: ${JSON.stringify(ctx)} to get: ${wrapper.toJsonString()}`,
+        `Evaluated ${namespace}/${configKey} using the following context: ${ctx.toString()} to get: ${wrapper.toJsonString()}`,
       )
     }
 

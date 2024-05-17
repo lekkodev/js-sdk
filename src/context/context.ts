@@ -79,9 +79,10 @@ class ClientContext {
   toString(): string {
     const pairs: string[] = []
     for (const k in this.data) {
-      pairs.push(`${k}: ${this.data[k].kind.value}`)
+      const maybeQuote = this.data[k].kind.case === "stringValue" ? '"' : ""
+      pairs.push(`${k}: ${maybeQuote}${this.data[k].kind.value}${maybeQuote}`)
     }
-    return pairs.join(", ")
+    return `{${pairs.join(", ")}}`
   }
 }
 
