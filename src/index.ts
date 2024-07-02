@@ -15,6 +15,110 @@ import {
   type ConfigCombination,
   getNamespaceCombinations,
 } from "./evaluation/combinations"
+import { type Any } from "@bufbuild/protobuf"
+
+interface LekkoGlobal {
+  lekkoClient?: SyncClient
+}
+
+const _global = globalThis as LekkoGlobal
+
+export function getOptionalClient(): SyncClient | undefined {
+  return _global.lekkoClient
+}
+
+function getClientOrThrow(client?: SyncClient): SyncClient {
+  client = client ?? getOptionalClient()
+  if (client === undefined) {
+    throw new Error("Lekko client is not initialized, call `initClient` first.")
+  }
+  return client
+}
+
+export async function initClient(options: BackendOptions): Promise<SyncClient> {
+  const client = await initCachedAPIClient(options)
+  _global.lekkoClient = client
+  return client
+}
+
+export function getBool(
+  namespace: string,
+  key: string,
+  ctx?: Record<string, string | number | boolean>,
+  client?: SyncClient,
+): boolean {
+  return getClientOrThrow(client).getBool(
+    namespace,
+    key,
+    ClientContext.fromJSON(ctx),
+  )
+}
+
+export function getInt(
+  namespace: string,
+  key: string,
+  ctx?: Record<string, string | number | boolean>,
+  client?: SyncClient,
+): bigint {
+  return getClientOrThrow(client).getInt(
+    namespace,
+    key,
+    ClientContext.fromJSON(ctx),
+  )
+}
+
+export function getFloat(
+  namespace: string,
+  key: string,
+  ctx?: Record<string, string | number | boolean>,
+  client?: SyncClient,
+): number {
+  return getClientOrThrow(client).getFloat(
+    namespace,
+    key,
+    ClientContext.fromJSON(ctx),
+  )
+}
+
+export function getString(
+  namespace: string,
+  key: string,
+  ctx?: Record<string, string | number | boolean>,
+  client?: SyncClient,
+): string {
+  return getClientOrThrow(client).getString(
+    namespace,
+    key,
+    ClientContext.fromJSON(ctx),
+  )
+}
+
+export function getJSON(
+  namespace: string,
+  key: string,
+  ctx?: Record<string, string | number | boolean>,
+  client?: SyncClient,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): any {
+  return getClientOrThrow(client).getJSON(
+    namespace,
+    key,
+    ClientContext.fromJSON(ctx),
+  )
+}
+
+export function getProto(
+  namespace: string,
+  key: string,
+  ctx?: Record<string, string | number | boolean>,
+  client?: SyncClient,
+): Any {
+  return getClientOrThrow(client).getProto(
+    namespace,
+    key,
+    ClientContext.fromJSON(ctx),
+  )
+}
 
 interface APIOptions {
   apiKey: string
@@ -52,8 +156,6 @@ interface BackendOptions {
   hostname?: string
   repositoryOwner: string
   repositoryName: string
-  updateIntervalMs?: number
-  serverPort?: number
 }
 
 function sdkVersion(): string {

@@ -215,8 +215,11 @@ export class Backend implements SyncClient {
 }
 
 function IsDebugMode(): boolean {
-  if (typeof localStorage !== 'undefined' && localStorage.getItem("LEKKO_DEBUG") === "true") {
-    return true;
+  if (
+    typeof localStorage !== "undefined" &&
+    localStorage.getItem("LEKKO_DEBUG") === "true"
+  ) {
+    return true
   }
   return typeof window === "undefined"
     ? process.env.LEKKO_DEBUG === "1"
