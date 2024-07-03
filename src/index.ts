@@ -41,6 +41,19 @@ export async function initClient(options: BackendOptions): Promise<SyncClient> {
   return client
 }
 
+export function get(
+  namespace: string,
+  key: string,
+  ctx?: Record<string, string | number | boolean>,
+  client?: SyncClient,
+) {
+  return getClientOrThrow(client).get(
+    namespace,
+    key,
+    ClientContext.fromJSON(ctx),
+  )
+}
+
 export function getBool(
   namespace: string,
   key: string,

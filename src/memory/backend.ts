@@ -20,6 +20,7 @@ import { type SyncClient } from "../types/client"
 import { Store, type configMap, type StoredEvalResult } from "./store"
 import { type ListContentsResponse } from "../gen/lekko/server/v1beta1/sdk_pb"
 import { EventsBatcher, toContextKeysProto } from "./events"
+import { isWellKnownPrimitive } from "../types/proto"
 
 const eventsBatchSize = 100
 
@@ -62,6 +63,11 @@ export class Backend implements SyncClient {
       throw new Error("type mismatch")
     }
     this.track(namespace, key, result, ctx)
+    // For primitive wrapper messages, we need to return wrapped value directly
+    // because they can't be used the same way as primitives
+    if (isWellKnownPrimitive(innerResult)) {
+      return innerResult.value
+    }
     return innerResult
   }
 
