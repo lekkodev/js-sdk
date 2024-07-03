@@ -1,6 +1,6 @@
 {
   "name": "@lekko/js-sdk",
-  "version": "0.1.6-beta.1",
+  "version": "0.1.6-beta.2",
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
@@ -58,7 +58,5 @@
     "typescript": "^5.2.2"
   },
   "packageManager": "yarn@3.6.3",
-  "files": [
-    "dist"
-  ]
+  "files": ["dist"]
 }

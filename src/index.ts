@@ -16,6 +16,7 @@ import {
   getNamespaceCombinations,
 } from "./evaluation/combinations"
 import { type Any } from "@bufbuild/protobuf"
+import { log } from "./debug"
 
 interface LekkoGlobal {
   lekkoClient?: SyncClient
@@ -38,6 +39,7 @@ function getClientOrThrow(client?: SyncClient): SyncClient {
 export async function initClient(options: BackendOptions): Promise<SyncClient> {
   const client = await initCachedAPIClient(options)
   _global.lekkoClient = client
+  log(`[lekko] Initialized client with options: ${JSON.stringify(options)}`)
   return client
 }
 
@@ -239,4 +241,5 @@ export {
   type configMap,
   getNamespaceCombinations,
   type ConfigCombination,
+  log,
 }

@@ -1,11 +1,3 @@
-import { DistributionService } from "../gen/lekko/backend/v1beta1/distribution_service_connect"
-import { FlagEvaluationEvent } from "../gen/lekko/backend/v1beta1/distribution_service_pb"
-import { RepositoryKey } from "../gen/lekko/client/v1beta1/configuration_service_pb"
-import {
-  type PromiseClient,
-  type Transport,
-  createPromiseClient,
-} from "@connectrpc/connect"
 import {
   type Any,
   BoolValue,
@@ -15,12 +7,21 @@ import {
   Timestamp,
   Value,
 } from "@bufbuild/protobuf"
+import {
+  type PromiseClient,
+  type Transport,
+  createPromiseClient,
+} from "@connectrpc/connect"
 import { ClientContext } from "../context/context"
-import { type SyncClient } from "../types/client"
-import { Store, type configMap, type StoredEvalResult } from "./store"
+import { log } from "../debug"
+import { DistributionService } from "../gen/lekko/backend/v1beta1/distribution_service_connect"
+import { FlagEvaluationEvent } from "../gen/lekko/backend/v1beta1/distribution_service_pb"
+import { RepositoryKey } from "../gen/lekko/client/v1beta1/configuration_service_pb"
 import { type ListContentsResponse } from "../gen/lekko/server/v1beta1/sdk_pb"
-import { EventsBatcher, toContextKeysProto } from "./events"
+import { type SyncClient } from "../types/client"
 import { isWellKnownPrimitive } from "../types/proto"
+import { EventsBatcher, toContextKeysProto } from "./events"
+import { Store, type StoredEvalResult, type configMap } from "./store"
 
 const eventsBatchSize = 100
 
@@ -111,11 +112,9 @@ export class Backend implements SyncClient {
       ctx = new ClientContext()
     }
     const result = this.store.evaluateType(namespace, key, ctx)
-    if (IsDebugMode()) {
-      console.log(
-        `Evaluated ${namespace}/${key} using the following context: ${ctx.toString()} to get a protobuf value at path: ${result.evalResult.path.toString()}`,
-      )
-    }
+    log(
+      `[lekko] Evaluated ${namespace}/${key} using the following context: ${ctx.toString()} to get a protobuf value at path: ${result.evalResult.path.toString()}`,
+    )
 
     this.track(namespace, key, result, ctx)
     return result.evalResult.value
@@ -142,11 +141,9 @@ export class Backend implements SyncClient {
     if (result.evalResult.value.unpackTo(wrapper) === undefined) {
       throw new Error("type mismatch")
     }
-    if (IsDebugMode()) {
-      console.log(
-        `Evaluated ${namespace}/${configKey} using the following context: ${ctx.toString()} to get: ${wrapper.toJsonString()}`,
-      )
-    }
+    log(
+      `[lekko] Evaluated ${namespace}/${configKey} using the following context: ${ctx.toString()} to get: ${wrapper.toJsonString()}`,
+    )
 
     this.track(namespace, configKey, result, ctx)
   }
@@ -195,6 +192,10 @@ export class Backend implements SyncClient {
       sessionKey: this.sessionKey,
     })
     this.store.load(contentsResponse)
+    log(
+      `[lekko] Loaded definitions from: ${this.repository.ownerName}/${this.repository.repoName}`,
+      `commit hash: ${contentsResponse.commitSha}.`,
+    )
   }
 
   async shouldUpdateStore() {
@@ -218,16 +219,4 @@ export class Backend implements SyncClient {
       sessionKey: this.sessionKey,
     })
   }
-}
-
-function IsDebugMode(): boolean {
-  if (
-    typeof localStorage !== "undefined" &&
-    localStorage.getItem("LEKKO_DEBUG") === "true"
-  ) {
-    return true
-  }
-  return typeof window === "undefined"
-    ? process.env.LEKKO_DEBUG === "1"
-    : "LEKKO_DEBUG" in window && window.LEKKO_DEBUG === 1
 }
