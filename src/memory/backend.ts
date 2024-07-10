@@ -13,7 +13,7 @@ import {
   createPromiseClient,
 } from "@connectrpc/connect"
 import { ClientContext } from "../context/context"
-import { log } from "../debug"
+import { logDebug } from "../debug"
 import { DistributionService } from "../gen/lekko/backend/v1beta1/distribution_service_connect"
 import { FlagEvaluationEvent } from "../gen/lekko/backend/v1beta1/distribution_service_pb"
 import { RepositoryKey } from "../gen/lekko/client/v1beta1/configuration_service_pb"
@@ -64,6 +64,10 @@ export class Backend implements SyncClient {
       throw new Error("type mismatch")
     }
     this.track(namespace, key, result, ctx)
+    logDebug(
+      `[lekko] Evaluated ${namespace}/${key} using the following context: ${ctx?.toString()} to get: ${innerResult.toJsonString()}`,
+    )
+
     // For primitive wrapper messages, we need to return wrapped value directly
     // because they can't be used the same way as primitives
     if (isWellKnownPrimitive(innerResult)) {
@@ -112,7 +116,7 @@ export class Backend implements SyncClient {
       ctx = new ClientContext()
     }
     const result = this.store.evaluateType(namespace, key, ctx)
-    log(
+    logDebug(
       `[lekko] Evaluated ${namespace}/${key} using the following context: ${ctx.toString()} to get a protobuf value at path: ${result.evalResult.path.toString()}`,
     )
 
@@ -141,7 +145,7 @@ export class Backend implements SyncClient {
     if (result.evalResult.value.unpackTo(wrapper) === undefined) {
       throw new Error("type mismatch")
     }
-    log(
+    logDebug(
       `[lekko] Evaluated ${namespace}/${configKey} using the following context: ${ctx.toString()} to get: ${wrapper.toJsonString()}`,
     )
 
@@ -192,8 +196,8 @@ export class Backend implements SyncClient {
       sessionKey: this.sessionKey,
     })
     this.store.load(contentsResponse)
-    log(
-      `[lekko] Loaded definitions from: ${this.repository.ownerName}/${this.repository.repoName}`,
+    logDebug(
+      `[lekko] Loaded remote lekkos from: ${this.repository.ownerName}/${this.repository.repoName}`,
       `commit hash: ${contentsResponse.commitSha}.`,
     )
   }
