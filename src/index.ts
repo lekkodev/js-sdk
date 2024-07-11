@@ -5,7 +5,11 @@ import {
 import { TransportClient } from "./client"
 import { ClientContext } from "./context/context"
 import { ClientTransportBuilder } from "./transport-builder"
-import { type SyncClient, type Client } from "./types/client"
+import {
+  type SyncClient,
+  type Client,
+  ClientNotInitializedError,
+} from "./types/client"
 import { Backend } from "./memory/backend"
 import { version } from "./version"
 import { GetRepositoryContentsResponse } from "./gen/lekko/backend/v1beta1/distribution_service_pb"
@@ -31,7 +35,7 @@ export function getOptionalClient(): SyncClient | undefined {
 function getClientOrThrow(client?: SyncClient): SyncClient {
   client = client ?? getOptionalClient()
   if (client === undefined) {
-    throw new Error("Lekko client is not initialized, call `initClient` first.")
+    throw new ClientNotInitializedError()
   }
   return client
 }
@@ -250,4 +254,5 @@ export {
   logDebug,
   logInfo,
   logError,
+  ClientNotInitializedError,
 }
