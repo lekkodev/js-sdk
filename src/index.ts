@@ -16,7 +16,7 @@ import {
   getNamespaceCombinations,
 } from "./evaluation/combinations"
 import { type Any } from "@bufbuild/protobuf"
-import { log } from "./debug"
+import { logDebug, logInfo, logError } from "./debug"
 
 interface LekkoGlobal {
   lekkoClient?: SyncClient
@@ -39,7 +39,6 @@ function getClientOrThrow(client?: SyncClient): SyncClient {
 export async function initClient(options: BackendOptions): Promise<SyncClient> {
   const client = await initCachedAPIClient(options)
   _global.lekkoClient = client
-  log(`[lekko] Initialized client with options: ${JSON.stringify(options)}`)
   return client
 }
 
@@ -192,6 +191,9 @@ async function initCachedAPIClient(
     sdkVersion(),
   )
   await client.initialize()
+  logInfo(
+    `[lekko] Connected to ${options.repositoryOwner}/${options.repositoryName} using API key "${options.apiKey?.slice(0, 12)}..."`,
+  )
   return client
 }
 
@@ -225,6 +227,10 @@ function initAPIClientFromContents(
     )
   }
   client.store.load(contents)
+  logDebug(
+    `[lekko] Loaded remote lekkos from: ${options.repositoryOwner}/${options.repositoryName}`,
+    `commit hash: ${contents.commitSha}.`,
+  )
   return client
 }
 
@@ -241,5 +247,7 @@ export {
   type configMap,
   getNamespaceCombinations,
   type ConfigCombination,
-  log,
+  logDebug,
+  logInfo,
+  logError,
 }
