@@ -57,3 +57,5 @@ export interface SyncClient {
   getConfigs: () => configMap
   close: () => Promise<void>
 }
+
+export class ClientNotInitializedError extends Error {}
