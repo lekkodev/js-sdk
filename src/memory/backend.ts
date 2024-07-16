@@ -13,7 +13,7 @@ import {
   createPromiseClient,
 } from "@connectrpc/connect"
 import { ClientContext } from "../context/context"
-import { logDebug } from "../debug"
+import { logDebug, logError } from "../debug"
 import { DistributionService } from "../gen/lekko/backend/v1beta1/distribution_service_connect"
 import { FlagEvaluationEvent } from "../gen/lekko/backend/v1beta1/distribution_service_pb"
 import { RepositoryKey } from "../gen/lekko/client/v1beta1/configuration_service_pb"
@@ -32,15 +32,17 @@ export class Backend implements SyncClient {
   public store: Store
   sessionKey?: string
   closed: boolean
-  timeout?: NodeJS.Timeout
   eventsBatcher: EventsBatcher
   version: string
+  updateIntervalId?: NodeJS.Timeout
+  updateIntervalMs?: number
 
   constructor(
     transport: Transport,
     repositoryOwner: string,
     repositoryName: string,
     version: string,
+    updateIntervalMs?: number,
     store?: Store,
   ) {
     this.distClient = createPromiseClient(DistributionService, transport)
@@ -51,6 +53,7 @@ export class Backend implements SyncClient {
     })
     this.closed = false
     this.version = version
+    this.updateIntervalMs = updateIntervalMs
     this.eventsBatcher = new EventsBatcher(this.distClient, eventsBatchSize)
   }
 
@@ -187,7 +190,23 @@ export class Backend implements SyncClient {
     if (fetchContents) {
       await this.updateStore()
     }
+    if (this.updateIntervalMs != null && this.updateIntervalMs > 0) {
+      this.updateIntervalId = globalThis.setInterval(() => {
+        this.checkForUpdates().catch((error) => {
+          logError("[lekko] failed to update from remote", error)
+        })
+      }, this.updateIntervalMs)
+    }
     this.eventsBatcher.init(this.sessionKey)
+  }
+
+  async checkForUpdates() {
+    if (this.closed) {
+      return
+    }
+    if (await this.shouldUpdateStore()) {
+      await this.updateStore()
+    }
   }
 
   async updateStore() {
@@ -213,8 +232,8 @@ export class Backend implements SyncClient {
 
   async close() {
     this.closed = true
-    if (this.timeout !== undefined) {
-      this.timeout.unref()
+    if (this.updateIntervalId !== undefined) {
+      globalThis.clearInterval(this.updateIntervalId)
     }
     if (this.eventsBatcher !== undefined) {
       await this.eventsBatcher.close()
