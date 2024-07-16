@@ -519,7 +519,7 @@ test("Test JFGI", () => {
     hostname: "https://web.api.lekko.dev",
     apiKey: "",
   }).build()
-  const client = new Backend(transport, "", "", "", store)
+  const client = new Backend(transport, "", "", "", undefined, store)
   const dog = client.get("test-ns", "dog") as { breed: string }
   expect(dog.breed).toEqual("Collie")
 })

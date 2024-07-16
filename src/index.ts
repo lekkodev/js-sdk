@@ -174,6 +174,7 @@ interface BackendOptions {
   hostname?: string
   repositoryOwner: string
   repositoryName: string
+  updateIntervalMs?: number
 }
 
 function sdkVersion(): string {
@@ -193,6 +194,7 @@ async function initCachedAPIClient(
     options.repositoryOwner,
     options.repositoryName,
     sdkVersion(),
+    options.updateIntervalMs,
   )
   await client.initialize()
   logInfo(
