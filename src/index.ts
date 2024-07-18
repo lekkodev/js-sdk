@@ -21,6 +21,11 @@ import {
 } from "./evaluation/combinations"
 import { type Any } from "@bufbuild/protobuf"
 import { logDebug, logInfo, logError } from "./debug"
+import {
+  getAPIKeyFromEnv,
+  getRepositoryNameFromEnv,
+  getRepositoryOwnerFromEnv,
+} from "./env"
 
 interface LekkoGlobal {
   lekkoClient?: SyncClient
@@ -38,6 +43,49 @@ function getClientOrThrow(client?: SyncClient): SyncClient {
     throw new ClientNotInitializedError()
   }
   return client
+}
+
+interface LekkoOptions {
+  apiKey?: string
+  repositoryOwner?: string
+  repositoryName?: string
+  updateIntervalMs?: number
+}
+
+const MIN_UPDATE_INTERVAL = 1 * 1000
+const DEFAULT_UPDATE_INTERVAL = 15 * 1000
+
+/** Initialize Lekko connection using `options`. */
+export async function initLekko(options?: LekkoOptions) {
+  const apiKey = options?.apiKey ?? getAPIKeyFromEnv()
+  if (apiKey === undefined) {
+    return
+  }
+
+  const repositoryOwner =
+    options?.repositoryOwner ?? getRepositoryOwnerFromEnv()
+  if (repositoryOwner === undefined) {
+    return
+  }
+
+  const repositoryName = options?.repositoryName ?? getRepositoryNameFromEnv()
+  if (repositoryName === undefined) {
+    return
+  }
+
+  const updateIntervalMs = options?.updateIntervalMs ?? DEFAULT_UPDATE_INTERVAL
+  if (updateIntervalMs < MIN_UPDATE_INTERVAL) {
+    throw new Error(
+      `update interval is too small, minimum ${MIN_UPDATE_INTERVAL}`,
+    )
+  }
+
+  await initClient({
+    apiKey,
+    repositoryOwner,
+    repositoryName,
+    updateIntervalMs,
+  })
 }
 
 export async function initClient(options: BackendOptions): Promise<SyncClient> {
