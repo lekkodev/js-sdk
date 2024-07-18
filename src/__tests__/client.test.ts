@@ -1,3 +1,4 @@
+import { expect, test, vi } from "vitest"
 import {
   GetBoolValueRequest,
   GetBoolValueResponse,
@@ -56,17 +57,13 @@ test("get bool config", async () => {
     repositoryOwner: "lekkodev",
     repositoryName: "config-test",
   }) as TransportClient
-  const mockFn = jest.fn()
-  Object.defineProperty(client.client, "getBoolValue", {
-    value: mockFn,
-    configurable: true,
-    writable: true,
-  })
-  jest.spyOn(client.client, "getBoolValue").mockImplementation(async () =>
-    GetBoolValueResponse.fromJson({
-      value: true,
-    }),
-  )
+  const mockFn = vi
+    .spyOn(client.client, "getBoolValue")
+    .mockImplementation(async () =>
+      GetBoolValueResponse.fromJson({
+        value: true,
+      }),
+    )
   expect(await client.getBool("types", "bool", SAMPLE_CONTEXT)).toBe(true)
   expect(mockFn.mock.lastCall[0]).toEqual(
     GetBoolValueRequest.fromJson({
@@ -91,13 +88,7 @@ test("get int config", async () => {
     repositoryOwner: "lekkodev",
     repositoryName: "config-test",
   }) as TransportClient
-  const mockFn = jest.fn()
-  Object.defineProperty(client.client, "getIntValue", {
-    value: mockFn,
-    configurable: true,
-    writable: true,
-  })
-  jest.spyOn(client.client, "getIntValue").mockImplementation(
+  const mockFn = vi.spyOn(client.client, "getIntValue").mockImplementation(
     async () =>
       new GetIntValueResponse({
         value: BigInt(42),
@@ -129,17 +120,13 @@ test("get float config", async () => {
     repositoryOwner: "lekkodev",
     repositoryName: "config-test",
   }) as TransportClient
-  const mockFn = jest.fn()
-  Object.defineProperty(client.client, "getFloatValue", {
-    value: mockFn,
-    configurable: true,
-    writable: true,
-  })
-  jest.spyOn(client.client, "getFloatValue").mockImplementation(async () =>
-    GetFloatValueResponse.fromJson({
-      value: 3.14,
-    }),
-  )
+  const mockFn = vi
+    .spyOn(client.client, "getFloatValue")
+    .mockImplementation(async () =>
+      GetFloatValueResponse.fromJson({
+        value: 3.14,
+      }),
+    )
   expect(await client.getFloat("types", "float", SAMPLE_CONTEXT)).toBeCloseTo(
     3.14,
   )
@@ -172,17 +159,13 @@ test("get json config", async () => {
       c: "foobar",
     },
   }
-  const mockFn = jest.fn()
-  Object.defineProperty(client.client, "getJSONValue", {
-    value: mockFn,
-    configurable: true,
-    writable: true,
-  })
-  jest.spyOn(client.client, "getJSONValue").mockImplementation(async () =>
-    GetJSONValueResponse.fromJson({
-      value: Buffer.from(JSON.stringify(mockedValue)).toString("base64"),
-    }),
-  )
+  const mockFn = vi
+    .spyOn(client.client, "getJSONValue")
+    .mockImplementation(async () =>
+      GetJSONValueResponse.fromJson({
+        value: Buffer.from(JSON.stringify(mockedValue)).toString("base64"),
+      }),
+    )
   expect(await client.getJSON("types", "json", SAMPLE_CONTEXT)).toEqual(
     mockedValue,
   )
@@ -209,17 +192,13 @@ test("get string config", async () => {
     repositoryOwner: "lekkodev",
     repositoryName: "config-test",
   }) as TransportClient
-  const mockFn = jest.fn()
-  Object.defineProperty(client.client, "getStringValue", {
-    value: mockFn,
-    configurable: true,
-    writable: true,
-  })
-  jest.spyOn(client.client, "getStringValue").mockImplementation(async () =>
-    GetStringValueResponse.fromJson({
-      value: "foobar",
-    }),
-  )
+  const mockFn = vi
+    .spyOn(client.client, "getStringValue")
+    .mockImplementation(async () =>
+      GetStringValueResponse.fromJson({
+        value: "foobar",
+      }),
+    )
   expect(await client.getString("types", "string", SAMPLE_CONTEXT)).toBe(
     "foobar",
   )
@@ -252,13 +231,7 @@ test("get proto config", async () => {
       repositoryOwner: "lekkodev",
       repositoryName: "config-test",
     }) as TransportClient
-    const mockFn = jest.fn()
-    Object.defineProperty(client.client, "getProtoValue", {
-      value: mockFn,
-      configurable: true,
-      writable: true,
-    })
-    jest
+    const mockFn = vi
       .spyOn(client.client, "getProtoValue")
       .mockImplementation(async () => resp)
     expect(await client.getProto("types", "proto", SAMPLE_CONTEXT)).toEqual(a)
