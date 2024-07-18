@@ -3,7 +3,7 @@ import {
   RepositoryKey,
 } from "./gen/lekko/client/v1beta1/configuration_service_pb"
 import { TransportClient } from "./client"
-import { ClientContext } from "./context/context"
+import { ClientContext, type ContextObject } from "./context/context"
 import { ClientTransportBuilder } from "./transport-builder"
 import {
   type SyncClient,
@@ -55,7 +55,7 @@ export function get(
   return getClientOrThrow(client).get(
     namespace,
     key,
-    ClientContext.fromJSON(ctx),
+    ClientContext.fromObject(ctx),
   )
 }
 
@@ -68,7 +68,7 @@ export function getBool(
   return getClientOrThrow(client).getBool(
     namespace,
     key,
-    ClientContext.fromJSON(ctx),
+    ClientContext.fromObject(ctx),
   )
 }
 
@@ -81,7 +81,7 @@ export function getInt(
   return getClientOrThrow(client).getInt(
     namespace,
     key,
-    ClientContext.fromJSON(ctx),
+    ClientContext.fromObject(ctx),
   )
 }
 
@@ -94,7 +94,7 @@ export function getFloat(
   return getClientOrThrow(client).getFloat(
     namespace,
     key,
-    ClientContext.fromJSON(ctx),
+    ClientContext.fromObject(ctx),
   )
 }
 
@@ -107,7 +107,7 @@ export function getString(
   return getClientOrThrow(client).getString(
     namespace,
     key,
-    ClientContext.fromJSON(ctx),
+    ClientContext.fromObject(ctx),
   )
 }
 
@@ -121,7 +121,7 @@ export function getJSON(
   return getClientOrThrow(client).getJSON(
     namespace,
     key,
-    ClientContext.fromJSON(ctx),
+    ClientContext.fromObject(ctx),
   )
 }
 
@@ -134,7 +134,7 @@ export function getProto(
   return getClientOrThrow(client).getProto(
     namespace,
     key,
-    ClientContext.fromJSON(ctx),
+    ClientContext.fromObject(ctx),
   )
 }
 
@@ -241,6 +241,7 @@ function initAPIClientFromContents(
 }
 
 export {
+  type ContextObject,
   ClientContext,
   TransportClient,
   Value,

@@ -1,23 +1,22 @@
 import snakeCase from "lodash.snakecase"
+import camelCase from "lodash.camelcase"
 import { Value } from "../gen/lekko/client/v1beta1/configuration_service_pb"
 
-type ContextKey = string
+export type ContextObject = Record<string, string | number | boolean>
 
 class ClientContext {
-  data: Record<ContextKey, Value>
+  data: Record<string, Value>
 
   constructor() {
     this.data = {}
   }
 
-  static fromJSON(
-    jsonContext?: Record<string, string | number | boolean>,
-  ): ClientContext {
+  static fromObject(o?: ContextObject): ClientContext {
     const ctx = new ClientContext()
-    if (jsonContext === undefined) {
+    if (o === undefined) {
       return ctx
     }
-    Object.entries(jsonContext).forEach(([k, v]) => {
+    Object.entries(o).forEach(([k, v]) => {
       // For evaluation across languages, we proto-fy keys here
       // (alternatively, we could js-fy in eval logic)
       const casedK = snakeCase(k)
@@ -42,6 +41,30 @@ class ClientContext {
       }
     })
     return ctx
+  }
+
+  /** @deprecated use fromObject */
+  static fromJSON(jsonContext?: ContextObject): ClientContext {
+    return this.fromObject(jsonContext)
+  }
+
+  toObject(): ContextObject {
+    const context: ContextObject = {}
+    Object.entries(this.data).forEach(([k, v]) => {
+      const casedK = camelCase(k)
+      switch (v.kind.case) {
+        case "intValue": {
+          context[casedK] = Number(v.kind.value) // TODO: proper conversion
+          break
+        }
+        case "boolValue":
+        case "stringValue":
+        case "doubleValue": {
+          context[casedK] = v.kind.value
+        }
+      }
+    })
+    return context
   }
 
   get(key: string): Value | undefined {
