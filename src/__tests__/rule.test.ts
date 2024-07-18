@@ -1,3 +1,4 @@
+import { expect, test, describe } from "vitest"
 import { compareNumbers } from "../evaluation/rule"
 
 describe("compareNumbers", () => {

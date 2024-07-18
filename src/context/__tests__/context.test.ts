@@ -1,3 +1,4 @@
+import { expect, test } from "vitest"
 import { ClientContext } from "../context"
 
 test("convert ClientContext from object and back", () => {

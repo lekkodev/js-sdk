@@ -1,3 +1,4 @@
+import { expect, test } from "vitest"
 import { ClientTransportBuilder } from "../transport-builder"
 
 test("build default transport", () => {
