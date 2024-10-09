@@ -1,4 +1,4 @@
-import { type GetRepositoryContentsResponse } from "../gen/lekko/backend/v1beta1/distribution_service_pb"
+import { GetRepositoryContentsResponse } from "../internal"
 import { type Feature } from "../gen/lekko/feature/v1beta1/feature_pb"
 import {
   Config,

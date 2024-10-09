@@ -50,6 +50,7 @@ interface LekkoOptions {
   repositoryOwner?: string
   repositoryName?: string
   updateIntervalMs?: number
+  keepContentsResponse?: boolean
 }
 
 const MIN_UPDATE_INTERVAL = 1 * 1000
@@ -85,6 +86,7 @@ export async function initLekko(options?: LekkoOptions) {
     repositoryOwner,
     repositoryName,
     updateIntervalMs,
+    keepContentsResponse: options?.keepContentsResponse,
   })
 }
 
@@ -223,6 +225,7 @@ interface BackendOptions {
   repositoryOwner: string
   repositoryName: string
   updateIntervalMs?: number
+  keepContentsResponse?: boolean
 }
 
 function sdkVersion(): string {
@@ -243,6 +246,8 @@ async function initCachedAPIClient(
     options.repositoryName,
     sdkVersion(),
     options.updateIntervalMs,
+    undefined,
+    options.keepContentsResponse,
   )
   await client.initialize()
   logInfo(

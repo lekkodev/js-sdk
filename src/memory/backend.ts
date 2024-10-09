@@ -15,7 +15,10 @@ import {
 import { ClientContext } from "../context/context"
 import { logDebug, logError } from "../debug"
 import { DistributionService } from "../gen/lekko/backend/v1beta1/distribution_service_connect"
-import { FlagEvaluationEvent } from "../gen/lekko/backend/v1beta1/distribution_service_pb"
+import {
+  FlagEvaluationEvent,
+  GetRepositoryContentsResponse,
+} from "../gen/lekko/backend/v1beta1/distribution_service_pb"
 import { RepositoryKey } from "../gen/lekko/client/v1beta1/configuration_service_pb"
 import { type ListContentsResponse } from "../gen/lekko/server/v1beta1/sdk_pb"
 import { type SyncClient } from "../types/client"
@@ -36,6 +39,8 @@ export class Backend implements SyncClient {
   version: string
   updateIntervalId?: NodeJS.Timeout
   updateIntervalMs?: number
+  keepContentsResponse: boolean
+  public contentsResponse: GetRepositoryContentsResponse | undefined
 
   constructor(
     transport: Transport,
@@ -44,6 +49,7 @@ export class Backend implements SyncClient {
     version: string,
     updateIntervalMs?: number,
     store?: Store,
+    keepContentsResponse?: boolean,
   ) {
     this.distClient = createPromiseClient(DistributionService, transport)
     this.store = store ?? new Store(repositoryOwner, repositoryName)
@@ -55,6 +61,7 @@ export class Backend implements SyncClient {
     this.version = version
     this.updateIntervalMs = updateIntervalMs
     this.eventsBatcher = new EventsBatcher(this.distClient, eventsBatchSize)
+    this.keepContentsResponse = keepContentsResponse ?? false
   }
 
   get(namespace: string, key: string, ctx?: ClientContext): unknown {
@@ -214,6 +221,9 @@ export class Backend implements SyncClient {
       repoKey: this.repository,
       sessionKey: this.sessionKey,
     })
+    if (this.keepContentsResponse) {
+      this.contentsResponse = contentsResponse
+    }
     this.store.load(contentsResponse)
     logDebug(
       `[lekko] Loaded remote lekkos from: ${this.repository.ownerName}/${this.repository.repoName}`,

@@ -2,6 +2,7 @@ import { type Any } from "@bufbuild/protobuf"
 import { type ClientContext } from "../context/context"
 import { type RepositoryKey } from "../gen/lekko/client/v1beta1/configuration_service_pb"
 import { type Store, type configMap } from "../memory/store"
+import { GetRepositoryContentsResponse } from "../internal"
 
 export interface Client {
   repository: RepositoryKey
@@ -42,6 +43,7 @@ export interface Client {
 export interface SyncClient {
   repository: RepositoryKey
   store: Store
+  contentsResponse: GetRepositoryContentsResponse | undefined
   getBool: (namespace: string, key: string, ctx?: ClientContext) => boolean
   getInt: (namespace: string, key: string, ctx?: ClientContext) => bigint
   getFloat: (namespace: string, key: string, ctx?: ClientContext) => number
